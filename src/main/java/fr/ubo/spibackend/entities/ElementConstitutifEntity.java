@@ -37,6 +37,12 @@ public class ElementConstitutifEntity {
     @Basic
     @Column(name = "NBH_TP", nullable = true, precision = 0)
     private Byte nbhTp;
+    @ManyToOne
+    @JoinColumns({@JoinColumn(name = "CODE_FORMATION", referencedColumnName = "CODE_FORMATION", nullable = false), @JoinColumn(name = "CODE_UE", referencedColumnName = "CODE_UE", nullable = false)})
+    private UniteEnseignementEntity uniteEnseignement;
+    @ManyToOne
+    @JoinColumn(name = "NO_ENSEIGNANT", referencedColumnName = "NO_ENSEIGNANT", nullable = false)
+    private EnseignantEntity enseignantByNoEnseignant;
 
     public String getCodeFormation() {
         return codeFormation;
@@ -121,5 +127,21 @@ public class ElementConstitutifEntity {
     @Override
     public int hashCode() {
         return Objects.hash(codeFormation, codeUe, codeEc, noEnseignant, designation, description, nbhCm, nbhTd, nbhTp);
+    }
+
+    public UniteEnseignementEntity getUniteEnseignement() {
+        return uniteEnseignement;
+    }
+
+    public void setUniteEnseignement(UniteEnseignementEntity uniteEnseignement) {
+        this.uniteEnseignement = uniteEnseignement;
+    }
+
+    public EnseignantEntity getEnseignantByNoEnseignant() {
+        return enseignantByNoEnseignant;
+    }
+
+    public void setEnseignantByNoEnseignant(EnseignantEntity enseignantByNoEnseignant) {
+        this.enseignantByNoEnseignant = enseignantByNoEnseignant;
     }
 }

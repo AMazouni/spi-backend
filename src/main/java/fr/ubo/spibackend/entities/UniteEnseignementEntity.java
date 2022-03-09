@@ -37,6 +37,12 @@ public class UniteEnseignementEntity {
     @Basic
     @Column(name = "NBH_TP", nullable = true, precision = 0)
     private Byte nbhTp;
+    @ManyToOne
+    @JoinColumn(name = "CODE_FORMATION", referencedColumnName = "CODE_FORMATION", nullable = false)
+    private FormationEntity formationByCodeFormation;
+    @ManyToOne
+    @JoinColumn(name = "NO_ENSEIGNANT", referencedColumnName = "NO_ENSEIGNANT", nullable = false)
+    private EnseignantEntity enseignantByNoEnseignant;
 
     public String getCodeFormation() {
         return codeFormation;
@@ -121,5 +127,21 @@ public class UniteEnseignementEntity {
     @Override
     public int hashCode() {
         return Objects.hash(codeFormation, codeUe, noEnseignant, designation, semestre, description, nbhCm, nbhTd, nbhTp);
+    }
+
+    public FormationEntity getFormationByCodeFormation() {
+        return formationByCodeFormation;
+    }
+
+    public void setFormationByCodeFormation(FormationEntity formationByCodeFormation) {
+        this.formationByCodeFormation = formationByCodeFormation;
+    }
+
+    public EnseignantEntity getEnseignantByNoEnseignant() {
+        return enseignantByNoEnseignant;
+    }
+
+    public void setEnseignantByNoEnseignant(EnseignantEntity enseignantByNoEnseignant) {
+        this.enseignantByNoEnseignant = enseignantByNoEnseignant;
     }
 }

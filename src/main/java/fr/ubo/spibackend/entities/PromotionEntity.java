@@ -2,6 +2,7 @@ package fr.ubo.spibackend.entities;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -43,6 +44,16 @@ public class PromotionEntity {
     @Basic
     @Column(name = "COMMENTAIRE", nullable = true, length = 255)
     private String commentaire;
+    @OneToMany(mappedBy = "promotion")
+    private Collection<CandidatEntity> candidats;
+    @OneToMany(mappedBy = "promotion")
+    private Collection<EtudiantEntity> etudiants;
+    @ManyToOne
+    @JoinColumn(name = "CODE_FORMATION", referencedColumnName = "CODE_FORMATION", nullable = false)
+    private FormationEntity formationByCodeFormation;
+    @ManyToOne
+    @JoinColumn(name = "NO_ENSEIGNANT", referencedColumnName = "NO_ENSEIGNANT")
+    private EnseignantEntity enseignantByNoEnseignant;
 
     public String getCodeFormation() {
         return codeFormation;
@@ -143,5 +154,37 @@ public class PromotionEntity {
     @Override
     public int hashCode() {
         return Objects.hash(codeFormation, anneeUniversitaire, noEnseignant, siglePromotion, nbMaxEtudiant, dateReponseLp, dateReponseLalp, dateRentree, lieuRentree, processusStage, commentaire);
+    }
+
+    public Collection<CandidatEntity> getCandidats() {
+        return candidats;
+    }
+
+    public void setCandidats(Collection<CandidatEntity> candidats) {
+        this.candidats = candidats;
+    }
+
+    public Collection<EtudiantEntity> getEtudiants() {
+        return etudiants;
+    }
+
+    public void setEtudiants(Collection<EtudiantEntity> etudiants) {
+        this.etudiants = etudiants;
+    }
+
+    public FormationEntity getFormationByCodeFormation() {
+        return formationByCodeFormation;
+    }
+
+    public void setFormationByCodeFormation(FormationEntity formationByCodeFormation) {
+        this.formationByCodeFormation = formationByCodeFormation;
+    }
+
+    public EnseignantEntity getEnseignantByNoEnseignant() {
+        return enseignantByNoEnseignant;
+    }
+
+    public void setEnseignantByNoEnseignant(EnseignantEntity enseignantByNoEnseignant) {
+        this.enseignantByNoEnseignant = enseignantByNoEnseignant;
     }
 }
