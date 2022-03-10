@@ -1,19 +1,21 @@
 package fr.ubo.spibackend.entities;
 
+import net.minidev.json.annotate.JsonIgnore;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "PROMOTION", schema = "DOSI", catalog = "")
 @IdClass(PromotionEntityPK.class)
-public class PromotionEntity {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PromotionEntity implements Serializable {
     @Id
     @Column(name = "CODE_FORMATION", nullable = false, length = 8)
     private String codeFormation;
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "ANNEE_UNIVERSITAIRE", nullable = false, length = 10)
     private String anneeUniversitaire;
@@ -44,15 +46,15 @@ public class PromotionEntity {
     @Basic
     @Column(name = "COMMENTAIRE", nullable = true, length = 255)
     private String commentaire;
-    @OneToMany(mappedBy = "promotion")
-    private Collection<CandidatEntity> candidats;
-    @OneToMany(mappedBy = "promotion")
-    private Collection<EtudiantEntity> etudiants;
+    @OneToMany
+    private List<CandidatEntity> candidats;
+    @OneToMany
+    private List<EtudiantEntity> etudiants;
     @ManyToOne
-    @JoinColumn(name = "CODE_FORMATION", referencedColumnName = "CODE_FORMATION", nullable = false)
+    @JoinColumn(name = "CODE_FORMATION", referencedColumnName = "CODE_FORMATION", nullable = false,insertable = false,updatable = false)
     private FormationEntity formationByCodeFormation;
     @ManyToOne
-    @JoinColumn(name = "NO_ENSEIGNANT", referencedColumnName = "NO_ENSEIGNANT")
+    @JoinColumn(name = "NO_ENSEIGNANT", referencedColumnName = "NO_ENSEIGNANT",insertable = false,updatable = false)
     private EnseignantEntity enseignantByNoEnseignant;
 
     public String getCodeFormation() {
@@ -156,19 +158,19 @@ public class PromotionEntity {
         return Objects.hash(codeFormation, anneeUniversitaire, noEnseignant, siglePromotion, nbMaxEtudiant, dateReponseLp, dateReponseLalp, dateRentree, lieuRentree, processusStage, commentaire);
     }
 
-    public Collection<CandidatEntity> getCandidats() {
+    public List<CandidatEntity> getCandidats() {
         return candidats;
     }
 
-    public void setCandidats(Collection<CandidatEntity> candidats) {
+    public void setCandidats(List<CandidatEntity> candidats) {
         this.candidats = candidats;
     }
 
-    public Collection<EtudiantEntity> getEtudiants() {
+    public List<EtudiantEntity> getEtudiants() {
         return etudiants;
     }
 
-    public void setEtudiants(Collection<EtudiantEntity> etudiants) {
+    public void setEtudiants(List<EtudiantEntity> etudiants) {
         this.etudiants = etudiants;
     }
 

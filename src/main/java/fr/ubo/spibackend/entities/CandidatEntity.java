@@ -73,6 +73,8 @@ public class CandidatEntity {
     @Column(name = "DATE_REPONSE_CANDIDAT", nullable = true)
     private Date dateReponseCandidat;
 
+
+
     public String getNoCandidat() {
         return noCandidat;
     }

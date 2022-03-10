@@ -10,11 +10,9 @@ import java.util.Objects;
 public class PromotionEntityPK implements Serializable {
     @Column(name = "CODE_FORMATION", nullable = false, length = 8)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String codeFormation;
     @Column(name = "ANNEE_UNIVERSITAIRE", nullable = false, length = 10)
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String anneeUniversitaire;
 
     public String getCodeFormation() {

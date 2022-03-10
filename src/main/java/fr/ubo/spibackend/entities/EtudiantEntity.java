@@ -70,6 +70,7 @@ public class EtudiantEntity {
     @Column(name = "GROUPE_ANGLAIS", nullable = true, precision = 0)
     private BigInteger groupeAnglais;
 
+
     public String getNoEtudiant() {
         return noEtudiant;
     }

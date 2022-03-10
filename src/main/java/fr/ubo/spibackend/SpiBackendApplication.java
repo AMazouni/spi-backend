@@ -8,6 +8,7 @@ public class SpiBackendApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SpiBackendApplication.class, args);
+        System.out.println("3"+5%4);
     }
 
 }
