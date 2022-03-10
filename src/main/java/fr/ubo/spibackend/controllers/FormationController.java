@@ -18,7 +18,7 @@ import fr.ubo.spibackend.entities.Formation;
 import fr.ubo.spibackend.services.FormationService;
 
 @RestController
-@RequestMapping(path = "/v1/api")
+@RequestMapping(path = "/v1/api/formations")
 public class FormationController {
 
 	@Autowired
