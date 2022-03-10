@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RepositoryRestResource(path = "etudiant")
-public interface EtudiantEntityRepository extends JpaRepository<Etudiant, String> {
+public interface EtudiantRepository extends JpaRepository<Etudiant, String> {
 }

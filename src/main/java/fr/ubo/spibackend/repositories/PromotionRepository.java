@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @RepositoryRestResource(path = "promotions")
-public interface PromotionEntityRepository extends JpaRepository<Promotion, PromotionPK> {
+public interface PromotionRepository extends JpaRepository<Promotion, PromotionPK> {
 }

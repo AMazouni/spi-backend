@@ -1,7 +1,7 @@
 package fr.ubo.spibackend.controllers;
 
 
-import fr.ubo.spibackend.repositories.PromotionEntityRepository;
+import fr.ubo.spibackend.repositories.PromotionRepository;
 import fr.ubo.spibackend.entities.Promotion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ import java.util.List;
 public class PromotionController {
 
     @Autowired
-    PromotionEntityRepository promo;
+    PromotionRepository promo;
 
     @GetMapping("/")
     public List<Promotion> findAll(){
