@@ -1,17 +1,19 @@
 package fr.ubo.spibackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "ETUDIANT", schema = "DOSI", catalog = "")
-public class EtudiantEntity {
+@Table(name = "CANDIDAT", schema = "DOSI", catalog = "")
+public class Candidat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "NO_ETUDIANT", nullable = false, length = 50)
-    private String noEtudiant;
+    @Column(name = "NO_CANDIDAT", nullable = false, length = 50)
+    private String noCandidat;
     @Basic
     @Column(name = "CODE_FORMATION", nullable = false, length = 8)
     private String codeFormation;
@@ -46,9 +48,6 @@ public class EtudiantEntity {
     @Column(name = "EMAIL", nullable = false, length = 255)
     private String email;
     @Basic
-    @Column(name = "EMAIL_UBO", nullable = true, length = 255)
-    private String emailUbo;
-    @Basic
     @Column(name = "ADRESSE", nullable = false, length = 255)
     private String adresse;
     @Basic
@@ -64,19 +63,40 @@ public class EtudiantEntity {
     @Column(name = "UNIVERSITE_ORIGINE", nullable = false, length = 6)
     private String universiteOrigine;
     @Basic
-    @Column(name = "GROUPE_TP", nullable = true, precision = 0)
-    private BigInteger groupeTp;
+    @Column(name = "LISTE_SELECTION", nullable = true, length = 6)
+    private String listeSelection;
     @Basic
-    @Column(name = "GROUPE_ANGLAIS", nullable = true, precision = 0)
-    private BigInteger groupeAnglais;
+    @Column(name = "SELECTION_NO_ORDRE", nullable = true, precision = 0)
+    private BigInteger selectionNoOrdre;
+    @Basic
+    @Column(name = "CONFIRMATION_CANDIDAT", nullable = true, length = 1)
+    private String confirmationCandidat;
+    @Basic
+    @Column(name = "DATE_REPONSE_CANDIDAT", nullable = true)
+    private Date dateReponseCandidat;
 
 
-    public String getNoEtudiant() {
-        return noEtudiant;
+
+    @ManyToOne
+    @JsonIgnore
+    @JoinColumns({ @JoinColumn(name = "ANNEE_UNIVERSITAIRE", referencedColumnName = "ANNEE_UNIVERSITAIRE",insertable = false,updatable = false),
+            @JoinColumn(name = "CODE_FORMATION", referencedColumnName = "CODE_FORMATION",insertable = false,updatable = false) })
+    private Promotion promotion;
+
+    public Promotion getPromotion() {
+        return promotion;
     }
 
-    public void setNoEtudiant(String noEtudiant) {
-        this.noEtudiant = noEtudiant;
+    public void setPromotion(Promotion promotion) {
+        this.promotion = promotion;
+    }
+
+    public String getNoCandidat() {
+        return noCandidat;
+    }
+
+    public void setNoCandidat(String noCandidat) {
+        this.noCandidat = noCandidat;
     }
 
     public String getCodeFormation() {
@@ -167,14 +187,6 @@ public class EtudiantEntity {
         this.email = email;
     }
 
-    public String getEmailUbo() {
-        return emailUbo;
-    }
-
-    public void setEmailUbo(String emailUbo) {
-        this.emailUbo = emailUbo;
-    }
-
     public String getAdresse() {
         return adresse;
     }
@@ -215,32 +227,48 @@ public class EtudiantEntity {
         this.universiteOrigine = universiteOrigine;
     }
 
-    public BigInteger getGroupeTp() {
-        return groupeTp;
+    public String getListeSelection() {
+        return listeSelection;
     }
 
-    public void setGroupeTp(BigInteger groupeTp) {
-        this.groupeTp = groupeTp;
+    public void setListeSelection(String listeSelection) {
+        this.listeSelection = listeSelection;
     }
 
-    public BigInteger getGroupeAnglais() {
-        return groupeAnglais;
+    public BigInteger getSelectionNoOrdre() {
+        return selectionNoOrdre;
     }
 
-    public void setGroupeAnglais(BigInteger groupeAnglais) {
-        this.groupeAnglais = groupeAnglais;
+    public void setSelectionNoOrdre(BigInteger selectionNoOrdre) {
+        this.selectionNoOrdre = selectionNoOrdre;
+    }
+
+    public String getConfirmationCandidat() {
+        return confirmationCandidat;
+    }
+
+    public void setConfirmationCandidat(String confirmationCandidat) {
+        this.confirmationCandidat = confirmationCandidat;
+    }
+
+    public Date getDateReponseCandidat() {
+        return dateReponseCandidat;
+    }
+
+    public void setDateReponseCandidat(Date dateReponseCandidat) {
+        this.dateReponseCandidat = dateReponseCandidat;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EtudiantEntity that = (EtudiantEntity) o;
-        return Objects.equals(noEtudiant, that.noEtudiant) && Objects.equals(codeFormation, that.codeFormation) && Objects.equals(anneeUniversitaire, that.anneeUniversitaire) && Objects.equals(nom, that.nom) && Objects.equals(prenom, that.prenom) && Objects.equals(sexe, that.sexe) && Objects.equals(dateNaissance, that.dateNaissance) && Objects.equals(lieuNaissance, that.lieuNaissance) && Objects.equals(nationalite, that.nationalite) && Objects.equals(telephone, that.telephone) && Objects.equals(mobile, that.mobile) && Objects.equals(email, that.email) && Objects.equals(emailUbo, that.emailUbo) && Objects.equals(adresse, that.adresse) && Objects.equals(codePostal, that.codePostal) && Objects.equals(ville, that.ville) && Objects.equals(paysOrigine, that.paysOrigine) && Objects.equals(universiteOrigine, that.universiteOrigine) && Objects.equals(groupeTp, that.groupeTp) && Objects.equals(groupeAnglais, that.groupeAnglais);
+        Candidat that = (Candidat) o;
+        return Objects.equals(noCandidat, that.noCandidat) && Objects.equals(codeFormation, that.codeFormation) && Objects.equals(anneeUniversitaire, that.anneeUniversitaire) && Objects.equals(nom, that.nom) && Objects.equals(prenom, that.prenom) && Objects.equals(sexe, that.sexe) && Objects.equals(dateNaissance, that.dateNaissance) && Objects.equals(lieuNaissance, that.lieuNaissance) && Objects.equals(nationalite, that.nationalite) && Objects.equals(telephone, that.telephone) && Objects.equals(mobile, that.mobile) && Objects.equals(email, that.email) && Objects.equals(adresse, that.adresse) && Objects.equals(codePostal, that.codePostal) && Objects.equals(ville, that.ville) && Objects.equals(paysOrigine, that.paysOrigine) && Objects.equals(universiteOrigine, that.universiteOrigine) && Objects.equals(listeSelection, that.listeSelection) && Objects.equals(selectionNoOrdre, that.selectionNoOrdre) && Objects.equals(confirmationCandidat, that.confirmationCandidat) && Objects.equals(dateReponseCandidat, that.dateReponseCandidat);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(noEtudiant, codeFormation, anneeUniversitaire, nom, prenom, sexe, dateNaissance, lieuNaissance, nationalite, telephone, mobile, email, emailUbo, adresse, codePostal, ville, paysOrigine, universiteOrigine, groupeTp, groupeAnglais);
+        return Objects.hash(noCandidat, codeFormation, anneeUniversitaire, nom, prenom, sexe, dateNaissance, lieuNaissance, nationalite, telephone, mobile, email, adresse, codePostal, ville, paysOrigine, universiteOrigine, listeSelection, selectionNoOrdre, confirmationCandidat, dateReponseCandidat);
     }
 }

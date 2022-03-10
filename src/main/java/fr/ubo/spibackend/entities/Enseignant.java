@@ -5,7 +5,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "ENSEIGNANT", schema = "DOSI", catalog = "")
-public class EnseignantEntity {
+public class Enseignant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "NO_ENSEIGNANT", nullable = false, precision = 0)
@@ -155,7 +155,7 @@ public class EnseignantEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EnseignantEntity that = (EnseignantEntity) o;
+        Enseignant that = (Enseignant) o;
         return noEnseignant == that.noEnseignant && Objects.equals(type, that.type) && Objects.equals(sexe, that.sexe) && Objects.equals(nom, that.nom) && Objects.equals(prenom, that.prenom) && Objects.equals(adresse, that.adresse) && Objects.equals(codePostal, that.codePostal) && Objects.equals(ville, that.ville) && Objects.equals(pays, that.pays) && Objects.equals(mobile, that.mobile) && Objects.equals(telephone, that.telephone) && Objects.equals(emailUbo, that.emailUbo) && Objects.equals(emailPerso, that.emailPerso);
     }
 

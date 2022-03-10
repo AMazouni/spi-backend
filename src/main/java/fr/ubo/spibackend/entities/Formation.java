@@ -6,7 +6,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "FORMATION", schema = "DOSI", catalog = "")
-public class FormationEntity {
+public class Formation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "CODE_FORMATION", nullable = false, length = 8)
@@ -90,7 +90,7 @@ public class FormationEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FormationEntity that = (FormationEntity) o;
+        Formation that = (Formation) o;
         return n0Annee == that.n0Annee && Objects.equals(codeFormation, that.codeFormation) && Objects.equals(diplome, that.diplome) && Objects.equals(nomFormation, that.nomFormation) && Objects.equals(doubleDiplome, that.doubleDiplome) && Objects.equals(debutAccreditation, that.debutAccreditation) && Objects.equals(finAccreditation, that.finAccreditation);
     }
 

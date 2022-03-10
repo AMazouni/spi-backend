@@ -1,13 +1,11 @@
 package fr.ubo.spibackend.entities;
 
 import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class PromotionEntityPK implements Serializable {
+public class PromotionPK implements Serializable {
     @Column(name = "CODE_FORMATION", nullable = false, length = 8)
     @Id
     private String codeFormation;
@@ -35,7 +33,7 @@ public class PromotionEntityPK implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PromotionEntityPK that = (PromotionEntityPK) o;
+        PromotionPK that = (PromotionPK) o;
         return Objects.equals(codeFormation, that.codeFormation) && Objects.equals(anneeUniversitaire, that.anneeUniversitaire);
     }
 

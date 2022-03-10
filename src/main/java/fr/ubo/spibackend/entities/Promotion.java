@@ -1,18 +1,16 @@
 package fr.ubo.spibackend.entities;
 
-import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "PROMOTION", schema = "DOSI", catalog = "")
-@IdClass(PromotionEntityPK.class)
-public class PromotionEntity implements Serializable {
+@IdClass(PromotionPK.class)
+public class Promotion implements Serializable {
     @Id
     @Column(name = "CODE_FORMATION", nullable = false, length = 8)
     private String codeFormation;
@@ -46,16 +44,16 @@ public class PromotionEntity implements Serializable {
     @Basic
     @Column(name = "COMMENTAIRE", nullable = true, length = 255)
     private String commentaire;
-    @OneToMany
-    private List<CandidatEntity> candidats;
-    @OneToMany
-    private List<EtudiantEntity> etudiants;
+    @OneToMany(mappedBy = "promotion")
+    private List<Candidat> candidats;
+    @OneToMany(mappedBy = "promotionEtudiant")
+    private List<Etudiant> etudiants;
     @ManyToOne
     @JoinColumn(name = "CODE_FORMATION", referencedColumnName = "CODE_FORMATION", nullable = false,insertable = false,updatable = false)
-    private FormationEntity formationByCodeFormation;
+    private Formation formationByCodeFormation;
     @ManyToOne
     @JoinColumn(name = "NO_ENSEIGNANT", referencedColumnName = "NO_ENSEIGNANT",insertable = false,updatable = false)
-    private EnseignantEntity enseignantByNoEnseignant;
+    private Enseignant enseignantByNoEnseignant;
 
     public String getCodeFormation() {
         return codeFormation;
@@ -149,7 +147,7 @@ public class PromotionEntity implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PromotionEntity that = (PromotionEntity) o;
+        Promotion that = (Promotion) o;
         return nbMaxEtudiant == that.nbMaxEtudiant && Objects.equals(codeFormation, that.codeFormation) && Objects.equals(anneeUniversitaire, that.anneeUniversitaire) && Objects.equals(noEnseignant, that.noEnseignant) && Objects.equals(siglePromotion, that.siglePromotion) && Objects.equals(dateReponseLp, that.dateReponseLp) && Objects.equals(dateReponseLalp, that.dateReponseLalp) && Objects.equals(dateRentree, that.dateRentree) && Objects.equals(lieuRentree, that.lieuRentree) && Objects.equals(processusStage, that.processusStage) && Objects.equals(commentaire, that.commentaire);
     }
 
@@ -158,35 +156,35 @@ public class PromotionEntity implements Serializable {
         return Objects.hash(codeFormation, anneeUniversitaire, noEnseignant, siglePromotion, nbMaxEtudiant, dateReponseLp, dateReponseLalp, dateRentree, lieuRentree, processusStage, commentaire);
     }
 
-    public List<CandidatEntity> getCandidats() {
+    public List<Candidat> getCandidats() {
         return candidats;
     }
 
-    public void setCandidats(List<CandidatEntity> candidats) {
+    public void setCandidats(List<Candidat> candidats) {
         this.candidats = candidats;
     }
 
-    public List<EtudiantEntity> getEtudiants() {
+    public List<Etudiant> getEtudiants() {
         return etudiants;
     }
 
-    public void setEtudiants(List<EtudiantEntity> etudiants) {
+    public void setEtudiants(List<Etudiant> etudiants) {
         this.etudiants = etudiants;
     }
 
-    public FormationEntity getFormationByCodeFormation() {
+    public Formation getFormationByCodeFormation() {
         return formationByCodeFormation;
     }
 
-    public void setFormationByCodeFormation(FormationEntity formationByCodeFormation) {
+    public void setFormationByCodeFormation(Formation formationByCodeFormation) {
         this.formationByCodeFormation = formationByCodeFormation;
     }
 
-    public EnseignantEntity getEnseignantByNoEnseignant() {
+    public Enseignant getEnseignantByNoEnseignant() {
         return enseignantByNoEnseignant;
     }
 
-    public void setEnseignantByNoEnseignant(EnseignantEntity enseignantByNoEnseignant) {
+    public void setEnseignantByNoEnseignant(Enseignant enseignantByNoEnseignant) {
         this.enseignantByNoEnseignant = enseignantByNoEnseignant;
     }
 }
