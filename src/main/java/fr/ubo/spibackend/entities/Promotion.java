@@ -25,7 +25,7 @@ public class Promotion implements Serializable {
     private String siglePromotion;
     @Basic
     @Column(name = "NB_MAX_ETUDIANT", nullable = false, precision = 0)
-    private byte nbMaxEtudiant;
+    private int nbMaxEtudiant;
     @Basic
     @Column(name = "DATE_REPONSE_LP", nullable = true)
     private Date dateReponseLp;
@@ -87,7 +87,7 @@ public class Promotion implements Serializable {
         this.siglePromotion = siglePromotion;
     }
 
-    public byte getNbMaxEtudiant() {
+    public int getNbMaxEtudiant() {
         return nbMaxEtudiant;
     }
 

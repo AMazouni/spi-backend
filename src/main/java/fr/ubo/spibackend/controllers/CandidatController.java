@@ -32,12 +32,15 @@ public class CandidatController {
                 return new ResponseEntity("Le candidat "+candidat.getNoCandidat()+" existe deja", HttpStatus.OK);
             }
             logger.info("Ce candidat n'existe pas encore");
-            if(candidat.getNoCandidat()!=null && candidat.getAdresse()!=null && candidat.getAnneeUniversitaire()!=null && candidat.getCodeFormation()!=null &&
+            if( candidat.getAdresse()!=null && candidat.getAnneeUniversitaire()!=null && candidat.getCodeFormation()!=null &&
                     candidat.getCodePostal()!=null && candidat.getEmail()!=null && candidat.getCodePostal()!=null && candidat.getDateNaissance()!=null &&
-                    candidat.getMobile()!=null && candidat.getLieuNaissance()!=null && candidat.getNationalite()!=null && candidat.getNom()!=null && candidat.getPaysOrigine()!=null &&
-                    candidat.getPrenom()!=null && candidat.getPromotion()!=null && candidat.getSexe()!=null && candidat.getUniversiteOrigine()!=null && candidat.getVille()!= null && candidat.getTelephone()!=null)
+                    candidat.getLieuNaissance()!=null && candidat.getNationalite()!=null && candidat.getNom()!=null && candidat.getPaysOrigine()!=null &&
+                    candidat.getPrenom()!=null && candidat.getPromotion()!=null && candidat.getSexe()!=null && candidat.getUniversiteOrigine()!=null && candidat.getVille()!= null) {
                 candidatServices.saveCandidat(candidat);
-            return new ResponseEntity<>(data, HttpStatus.OK);
+                return new ResponseEntity<>(data, HttpStatus.OK);
+            }
+            else
+                 return new ResponseEntity("Informations manquantes sur le candidat à enregistrer ", HttpStatus.OK);
 
         } catch (Exception e) {
             logger.error("Problème survenu durant l'insertion du candidat "+e);
