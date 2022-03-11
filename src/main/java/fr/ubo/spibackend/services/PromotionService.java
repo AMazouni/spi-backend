@@ -34,6 +34,7 @@ public class PromotionService {
        if(result.isPresent()){
            Promotion promo= result.get();
 //           promo.getCandidats().sort(e->e);
+           return promo;
        }
        if(code.equals("a")){
            throw new ServiceException("test", HttpStatus.BAD_REQUEST) ;

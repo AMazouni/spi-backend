@@ -25,8 +25,13 @@ public class PromotionController {
     PromotionService promoServ;
 
     @GetMapping("/")
-    public List<Promotion> findAll(){
-        return promoServ.findAll();
+    public ResponseEntity findAll(){
+
+        try {
+            return new ResponseEntity(promoServ.findAll(), HttpStatus.OK);
+        }catch (Exception e ){
+            return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("/{code}/{annee}")
@@ -36,7 +41,7 @@ public class PromotionController {
         }catch(ServiceException e){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
         }catch (Exception e ){
-            return new ResponseEntity(e, HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("/{code}")
