@@ -13,6 +13,15 @@ public class PromotionPK implements Serializable {
     @Id
     private String anneeUniversitaire;
 
+    public PromotionPK(String codeFormation, String anneeUniversitaire) {
+        this.codeFormation = codeFormation;
+        this.anneeUniversitaire = anneeUniversitaire;
+    }
+
+    public PromotionPK() {
+        super();
+    }
+
     public String getCodeFormation() {
         return codeFormation;
     }
