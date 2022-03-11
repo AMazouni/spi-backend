@@ -1,7 +1,7 @@
 package fr.ubo.spibackend.controllers;
 
 import fr.ubo.spibackend.entities.Candidat;
-import fr.ubo.spibackend.services.CandidatServices;
+import fr.ubo.spibackend.services.CandidatService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.List;
 public class CandidatController {
 
     @Autowired
-   private CandidatServices candidatServices;
+   private CandidatService candidatService;
     private static final Logger logger = LogManager.getLogger(CandidatController.class);
 
 
@@ -24,7 +24,7 @@ public class CandidatController {
     public ResponseEntity<Candidat> addCandidat(@RequestBody Candidat candidat) {
 
         try {
-            Candidat data = candidatServices.getCandidatByNoCandidat(candidat.getNoCandidat());
+            Candidat data = candidatService.getCandidatByNoCandidat(candidat.getNoCandidat());
 
 
             if (data!=null) {
@@ -36,7 +36,7 @@ public class CandidatController {
                     candidat.getCodePostal()!=null && candidat.getEmail()!=null && candidat.getCodePostal()!=null && candidat.getDateNaissance()!=null &&
                     candidat.getMobile()!=null && candidat.getLieuNaissance()!=null && candidat.getNationalite()!=null && candidat.getNom()!=null && candidat.getPaysOrigine()!=null &&
                     candidat.getPrenom()!=null && candidat.getPromotion()!=null && candidat.getSexe()!=null && candidat.getUniversiteOrigine()!=null && candidat.getVille()!= null && candidat.getTelephone()!=null)
-                candidatServices.saveCandidat(candidat);
+                candidatService.saveCandidat(candidat);
             return new ResponseEntity<>(data, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -48,7 +48,7 @@ public class CandidatController {
     @GetMapping("/candidats/{codeFormation}/{anneeUniversitaire}")
     public ResponseEntity<List<Candidat>> findCandidatBycodeFormationAndAnneeUniversitaire(@PathVariable String codeFormation, @PathVariable String anneeUniversitaire){
         try {
-            List<Candidat> data = candidatServices.getAllCandidatBycodeAndAnnee(codeFormation, anneeUniversitaire);
+            List<Candidat> data = candidatService.getAllCandidatBycodeAndAnnee(codeFormation, anneeUniversitaire);
 
             if (data.isEmpty()) {
                 logger.warn("Pas de données trouvées");
