@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
-public class CandidatServices {
+public class CandidatService {
 
     @Autowired
     private CandidatRepository candidatRepo;
