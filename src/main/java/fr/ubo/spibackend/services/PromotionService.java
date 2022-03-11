@@ -1,9 +1,11 @@
 package fr.ubo.spibackend.services;
 
+import fr.ubo.spibackend.entities.Candidat;
 import fr.ubo.spibackend.entities.Promotion;
 import fr.ubo.spibackend.entities.PromotionPK;
 import fr.ubo.spibackend.exception.ServiceException;
 import fr.ubo.spibackend.repositories.PromotionRepository;
+import fr.ubo.spibackend.utils.SortEntites;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PromotionService {
@@ -33,7 +36,12 @@ public class PromotionService {
        Optional<Promotion> result= promoRepo.findById(pk);
        if(result.isPresent()){
            Promotion promo= result.get();
-//           promo.getCandidats().sort(e->e);
+//           List<Candidat> candidats=promo.getCandidats().stream().sorted((o1, o2)->o1.getListeSelection().
+//                           compareTo(o2.getListeSelection())).
+//                   collect(Collectors.toList());
+
+           promo.setCandidats(promo.getCandidats().stream().sorted((Candidat a, Candidat b) ->SortEntites.compareCandidats(a,b)).collect(Collectors.toList()));
+//           promo.setCandidats(candidats);
            return promo;
        }
        if(code.equals("a")){
@@ -44,7 +52,9 @@ public class PromotionService {
 
     }
 
-    public ArrayList<Promotion> findByCodeFormationOrderByAnneeUniversitaireDes(String code) {
-        return promoRepo.findByCodeFormationOrderByAnneeUniversitaireDesc(code);
+    public ArrayList<Promotion> findByCodeFormationOrderByAnneeUniversitaireDes(String code) throws ServiceException {
+        ArrayList<Promotion> r = promoRepo.findByCodeFormationOrderByAnneeUniversitaireDesc(code);
+        if(r.size()==0) throw new ServiceException("Aucune Promotion pour la focmation (code ="+code+")dans la BD",HttpStatus.NOT_FOUND);
+        return r;
     }
 }

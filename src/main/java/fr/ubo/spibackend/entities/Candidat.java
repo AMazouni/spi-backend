@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "CANDIDAT", schema = "DOSI", catalog = "")
-public class Candidat{
+public class Candidat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "NO_CANDIDAT", nullable = false, length = 50)
@@ -67,7 +67,7 @@ public class Candidat{
     private String listeSelection;
     @Basic
     @Column(name = "SELECTION_NO_ORDRE", nullable = true, precision = 0)
-    private int selectionNoOrdre;
+    private BigInteger selectionNoOrdre;
     @Basic
     @Column(name = "CONFIRMATION_CANDIDAT", nullable = true, length = 1)
     private String confirmationCandidat;
@@ -235,11 +235,11 @@ public class Candidat{
         this.listeSelection = listeSelection;
     }
 
-    public int getSelectionNoOrdre() {
+    public BigInteger getSelectionNoOrdre() {
         return selectionNoOrdre;
     }
 
-    public void setSelectionNoOrdre(int selectionNoOrdre) {
+    public void setSelectionNoOrdre(BigInteger selectionNoOrdre) {
         this.selectionNoOrdre = selectionNoOrdre;
     }
 
@@ -271,5 +271,4 @@ public class Candidat{
     public int hashCode() {
         return Objects.hash(noCandidat, codeFormation, anneeUniversitaire, nom, prenom, sexe, dateNaissance, lieuNaissance, nationalite, telephone, mobile, email, adresse, codePostal, ville, paysOrigine, universiteOrigine, listeSelection, selectionNoOrdre, confirmationCandidat, dateReponseCandidat);
     }
-
 }

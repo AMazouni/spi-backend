@@ -36,7 +36,8 @@ public class CandidatServices {
     }
 
     public List<Candidat> getAllCandidat(){
-        List<Candidat> candidats= candidatRepo.findAll().stream().sorted(Comparator.comparing(Candidat::getSelectionNoOrdre)).collect(Collectors.toList());
+//        List<Candidat> candidats= candidatRepo.findAll().stream().sorted(Comparator.comparing(Candidat::getSelectionNoOrdre)).collect(Collectors.toList());
+        List<Candidat> candidats = candidatRepo.findAll();
         if(candidats.size()==0) throw new NoSuchElementException();
         return candidats;
     }

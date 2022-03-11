@@ -43,7 +43,13 @@ public class PromotionController {
         }
     }
     @GetMapping("/{code}")
-    public ArrayList<Promotion> findByCode(@PathVariable String code) {
-        return promoServ.findByCodeFormationOrderByAnneeUniversitaireDes(code);
+    public ResponseEntity findByCode(@PathVariable String code) {
+        try {
+            return new ResponseEntity(promoServ.findByCodeFormationOrderByAnneeUniversitaireDes(code), HttpStatus.OK);
+        }catch(ServiceException e){
+            return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+        }catch (Exception e ){
+            return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }
