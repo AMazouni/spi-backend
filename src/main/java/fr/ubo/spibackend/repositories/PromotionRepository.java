@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 @RepositoryRestResource(path = "promotions")
 public interface PromotionRepository extends JpaRepository<Promotion, PromotionPK> {
+
+    public Promotion findByAnneeUniversitaireAndCodeFormation(String annee,String code);
 }
