@@ -8,15 +8,11 @@ import fr.ubo.spibackend.services.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
 
+@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("promotion")
 public class PromotionController {
@@ -29,6 +25,8 @@ public class PromotionController {
 
         try {
             return new ResponseEntity(promoServ.findAll(), HttpStatus.OK);
+        }catch(ServiceException e){
+            return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
         }catch (Exception e ){
             return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -45,7 +43,7 @@ public class PromotionController {
         }
     }
     @GetMapping("/{code}")
-    public ArrayList<Promotion> findByCodeFormationOrderByAnneeUniversitaireDes(@PathVariable String code) {
+    public ArrayList<Promotion> findByCode(@PathVariable String code) {
         return promoServ.findByCodeFormationOrderByAnneeUniversitaireDes(code);
     }
 }
