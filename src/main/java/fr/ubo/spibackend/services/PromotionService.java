@@ -21,9 +21,9 @@ public class PromotionService {
     PromotionRepository promoRepo;
 
 
-    public List<Promotion> findAll() {
+    public List<Promotion> findAll() throws ServiceException {
           List<Promotion> promos= promoRepo.findAll(Sort.by(Sort.Direction.ASC, "anneeUniversitaire"));
-    if(promos.size()==0) throw new NoSuchElementException();
+    if(promos.size()==0) throw new ServiceException("Aucune Promotion dans la BD",HttpStatus.NOT_FOUND);
     return promos;
     }
 
