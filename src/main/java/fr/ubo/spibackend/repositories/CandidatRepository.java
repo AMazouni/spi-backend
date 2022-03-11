@@ -12,8 +12,5 @@ import java.util.List;
 @Repository
 @RepositoryRestResource(path = "candidat")
 public interface CandidatRepository extends JpaRepository<Candidat, String> {
-    List<Candidat> findByCodeFormation(String codeFormation);
-    List<Candidat> findByUniversiteOrigine(String universiteOrigine);
-    List<Candidat> findByCodeFormationAndAnneeUniversitaire(String codeFormation, String anneeUniversitaire);
-    List<Candidat> findByListeSelection(String listeSelecton);
+
 }
