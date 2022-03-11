@@ -1,17 +1,24 @@
 package fr.ubo.spibackend.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.math.BigInteger;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "CANDIDAT", schema = "DOSI", catalog = "")
 public class Candidat{
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     @Column(name = "NO_CANDIDAT", nullable = false, length = 50)
     private String noCandidat;
     @Basic
@@ -31,7 +38,7 @@ public class Candidat{
     private String sexe;
     @Basic
     @Column(name = "DATE_NAISSANCE", nullable = false)
-    private Date dateNaissance;
+    private LocalDate dateNaissance;
     @Basic
     @Column(name = "LIEU_NAISSANCE", nullable = false, length = 255)
     private String lieuNaissance;
@@ -67,14 +74,13 @@ public class Candidat{
     private String listeSelection;
     @Basic
     @Column(name = "SELECTION_NO_ORDRE", nullable = true, precision = 0)
-    private int selectionNoOrdre;
+    private BigInteger selectionNoOrdre;
     @Basic
     @Column(name = "CONFIRMATION_CANDIDAT", nullable = true, length = 1)
     private String confirmationCandidat;
     @Basic
     @Column(name = "DATE_REPONSE_CANDIDAT", nullable = true)
-    private Date dateReponseCandidat;
-
+    private LocalDate dateReponseCandidat;
 
 
     @ManyToOne
@@ -82,6 +88,26 @@ public class Candidat{
     @JoinColumns({ @JoinColumn(name = "ANNEE_UNIVERSITAIRE", referencedColumnName = "ANNEE_UNIVERSITAIRE",insertable = false,updatable = false),
             @JoinColumn(name = "CODE_FORMATION", referencedColumnName = "CODE_FORMATION",insertable = false,updatable = false) })
     private Promotion promotion;
+
+    public Candidat(String codeFormation, String anneeUniversitaire, String nom, String prenom, String sexe, LocalDate dateNaissance, String lieuNaissance, String nationalite, String telephone, String mobile, String email, String adresse, String codePostal, String ville, String paysOrigine, String universiteOrigine, String listeSelection) {
+        this.codeFormation = codeFormation;
+        this.anneeUniversitaire = anneeUniversitaire;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.sexe = sexe;
+        this.dateNaissance = dateNaissance;
+        this.lieuNaissance = lieuNaissance;
+        this.nationalite = nationalite;
+        this.telephone = telephone;
+        this.mobile = mobile;
+        this.email = email;
+        this.adresse = adresse;
+        this.codePostal = codePostal;
+        this.ville = ville;
+        this.paysOrigine = paysOrigine;
+        this.universiteOrigine = universiteOrigine;
+        this.listeSelection = listeSelection;
+    }
 
     public Promotion getPromotion() {
         return promotion;
@@ -139,11 +165,11 @@ public class Candidat{
         this.sexe = sexe;
     }
 
-    public Date getDateNaissance() {
+    public LocalDate getDateNaissance() {
         return dateNaissance;
     }
 
-    public void setDateNaissance(Date dateNaissance) {
+    public void setDateNaissance(LocalDate dateNaissance) {
         this.dateNaissance = dateNaissance;
     }
 
@@ -235,11 +261,11 @@ public class Candidat{
         this.listeSelection = listeSelection;
     }
 
-    public int getSelectionNoOrdre() {
+    public BigInteger getSelectionNoOrdre() {
         return selectionNoOrdre;
     }
 
-    public void setSelectionNoOrdre(int selectionNoOrdre) {
+    public void setSelectionNoOrdre(BigInteger selectionNoOrdre) {
         this.selectionNoOrdre = selectionNoOrdre;
     }
 
@@ -251,11 +277,11 @@ public class Candidat{
         this.confirmationCandidat = confirmationCandidat;
     }
 
-    public Date getDateReponseCandidat() {
+    public LocalDate getDateReponseCandidat() {
         return dateReponseCandidat;
     }
 
-    public void setDateReponseCandidat(Date dateReponseCandidat) {
+    public void setDateReponseCandidat(LocalDate dateReponseCandidat) {
         this.dateReponseCandidat = dateReponseCandidat;
     }
 
