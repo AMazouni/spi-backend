@@ -2,7 +2,7 @@ package fr.ubo.spibackend.exception;
 
 import org.springframework.http.HttpStatus;
 
-public class ServiceException extends RuntimeException {
+public class ServiceException extends Exception {
 
     String errorMeassage;
     HttpStatus httpStatus;

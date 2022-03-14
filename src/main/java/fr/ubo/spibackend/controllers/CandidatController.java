@@ -26,7 +26,10 @@ public class CandidatController {
     public ResponseEntity<List<Candidat>> findAllCandidat() {
         try {
             return new ResponseEntity(candidatServices.getAllCandidat(), HttpStatus.OK);
-        } catch (Exception | ServiceException e) {
+        }catch (ServiceException e){
+            return new ResponseEntity(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+        }
+        catch (Exception  e) {
             return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

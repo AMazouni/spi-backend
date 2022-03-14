@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import fr.ubo.spibackend.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import fr.ubo.spibackend.entities.Formation;
+import fr.ubo.spibackend.exception.ServiceException;
 import fr.ubo.spibackend.repositories.FormationRepository;
 
 @Service
@@ -20,87 +19,59 @@ public class FormationService {
 	FormationRepository formationRepository;
 
 	public List<Formation> getAllFormations() throws ServiceException {
-			List<Formation> formations = new ArrayList<Formation>();
+		List<Formation> formations = new ArrayList<Formation>();
 
-			formationRepository.findAll().forEach(formations::add);
+		formationRepository.findAll().forEach(formations::add);
 
-			if (formations.isEmpty())
-				throw new ServiceException("Aucune Promotion dans la BD",HttpStatus.NOT_FOUND);
+		if (formations.isEmpty())
+			throw new ServiceException("Aucune Promotion dans la BD", HttpStatus.NOT_FOUND);
 
-			return formations;
+		return formations;
 	}
 
-	public ResponseEntity<List<Formation>> getByNomFormation(String nomFormation) {
+	public List<Formation> searchByCodeOrNom(String input) throws ServiceException {
 
-		try {
-			List<Formation> formations = new ArrayList<Formation>();
+		List<Formation> formations = new ArrayList<Formation>();
 
-			formationRepository.findByNomFormation(nomFormation).forEach(formations::add);
+		formationRepository.findByCodeFormationLikeOrNomFormationLike(input, input).forEach(formations::add);
 
-			return new ResponseEntity<>(formations, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		if (formations.isEmpty())
+			throw new ServiceException("Acune formations avec le nom " + input, HttpStatus.BAD_REQUEST);
+
+		return formations;
+
 	}
 
 	public Formation getFormationById(String id) throws ServiceException {
 		Optional<Formation> formation = formationRepository.findById(id);
 
 		if (formation.isPresent())
-			return  formation.get();
-		throw new ServiceException("Pas de formation avec id ="+id,HttpStatus.NOT_FOUND);
-
-
+			return formation.get();
+		throw new ServiceException("Pas de formation avec id =" + id, HttpStatus.NOT_FOUND);
 	}
 
-	public ResponseEntity<Formation> createFormation(Formation formation) {
-		try {
+	public Formation createFormation(Formation formation) throws ServiceException {
+		if (formation.getNomFormation() == null && formation.getDiplome() == null
+				&& formation.getDoubleDiplome() == null)
+			throw new ServiceException("Merci de remplir les champs obligatoires", HttpStatus.BAD_REQUEST);
+		if (formation.getN0Annee() <= 0)
+			throw new ServiceException("Merci de donner un numero valide", HttpStatus.BAD_REQUEST);
+		/*
+		 * Formation _formation = formationRepository.save(new
+		 * Formation(formation.getNomFormation(), formation.getN0Annee(),
+		 * formation.getDiplome(),formation.getDoubleDiplome(),
+		 * formation.getDebutAccreditation(), formation.getFinAccreditation() ));
+		 */
 
-			Formation _formation = formationRepository.save(formation);
-
-			return new ResponseEntity<>(_formation, HttpStatus.CREATED);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		return formationRepository.save(formation);
 	}
 
-	public ResponseEntity<Formation> updateFormation(String id, Formation formation) {
-		Optional<Formation> formationData = formationRepository.findById(id);
-
-		if (formationData.isPresent()) {
-			Formation _formation = formationData.get();
-
-			_formation.setDebutAccreditation(formation.getDebutAccreditation());
-			_formation.setDiplome(formation.getDiplome());
-			_formation.setDoubleDiplome(formation.getDoubleDiplome());
-			_formation.setFinAccreditation(formation.getFinAccreditation());
-			_formation.setN0Annee(formation.isN0Annee());
-			_formation.setNomFormation(formation.getNomFormation());
-
-			return new ResponseEntity<>(formationRepository.save(_formation), HttpStatus.OK);
-
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}
-
-	public ResponseEntity<HttpStatus> deleteFormation(String id) {
-
-		try {
+	public void deleteFormation(String id) throws ServiceException {
+		Formation formation = formationRepository.getById(id);
+		if (formation != null)
 			formationRepository.deleteById(id);
+		else
+			throw new ServiceException("La formation " + id + " n'exite pas", HttpStatus.BAD_REQUEST);
 
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	public ResponseEntity<HttpStatus> deleteAllFormations() {
-		try {
-			formationRepository.deleteAll();
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-		}
 	}
 }

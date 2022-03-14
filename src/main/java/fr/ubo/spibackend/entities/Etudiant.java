@@ -14,7 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
 public class Etudiant {
 	@Id
 	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "NO_ETUDIANT", strategy = "uuid2")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	@Column(name = "NO_ETUDIANT", nullable = false, length = 50)
 	private String noEtudiant;
 	@Basic

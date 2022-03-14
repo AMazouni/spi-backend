@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SpiBackendApplication {
 
 
-    public static void main(String[] args) {
-        SpringApplication.run(SpiBackendApplication.class, args);
-    }
+	public static void main(String[] args) {
+		SpringApplication.run(SpiBackendApplication.class, args);
+	}
 
 }
