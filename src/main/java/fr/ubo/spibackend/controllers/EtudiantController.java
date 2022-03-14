@@ -4,7 +4,7 @@ import fr.ubo.spibackend.entities.Candidat;
 import fr.ubo.spibackend.entities.Etudiant;
 import fr.ubo.spibackend.exception.RestErrorMessage;
 import fr.ubo.spibackend.exception.ServiceException;
-import fr.ubo.spibackend.services.EtudiantSerice;
+import fr.ubo.spibackend.services.EtudiantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.util.List;
 public class EtudiantController {
 
     @Autowired
-    EtudiantSerice etudiantSerice;
+    EtudiantService etudiantSerice;
 
     @PostMapping
     public ResponseEntity createEtudiant(@RequestBody List<Candidat> candidats) {

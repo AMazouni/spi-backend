@@ -9,7 +9,7 @@ public class Enseignant {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "NO_ENSEIGNANT", nullable = false, precision = 0)
-    private short noEnseignant;
+    private Short noEnseignant;
     @Basic
     @Column(name = "TYPE", nullable = false, length = 5)
     private String type;

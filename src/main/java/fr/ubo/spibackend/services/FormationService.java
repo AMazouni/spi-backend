@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import fr.ubo.spibackend.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,21 +19,15 @@ public class FormationService {
 	@Autowired
 	FormationRepository formationRepository;
 
-	public ResponseEntity<List<Formation>> getAllFormations() {
-
-		try {
+	public List<Formation> getAllFormations() throws ServiceException {
 			List<Formation> formations = new ArrayList<Formation>();
 
 			formationRepository.findAll().forEach(formations::add);
 
-			if (formations.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
+			if (formations.isEmpty())
+				throw new ServiceException("Aucune Promotion dans la BD",HttpStatus.NOT_FOUND);
 
-			return new ResponseEntity<>(formations, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+			return formations;
 	}
 
 	public ResponseEntity<List<Formation>> getByNomFormation(String nomFormation) {
@@ -48,14 +43,14 @@ public class FormationService {
 		}
 	}
 
-	public ResponseEntity<Formation> getFormationById(String id) {
+	public Formation getFormationById(String id) throws ServiceException {
 		Optional<Formation> formation = formationRepository.findById(id);
 
-		if (formation.isPresent()) {
-			return new ResponseEntity<>(formation.get(), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		if (formation.isPresent())
+			return  formation.get();
+		throw new ServiceException("Pas de formation avec id ="+id,HttpStatus.NOT_FOUND);
+
+
 	}
 
 	public ResponseEntity<Formation> createFormation(Formation formation) {
