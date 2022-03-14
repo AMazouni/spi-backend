@@ -36,7 +36,7 @@ public class PromotionService {
     @Autowired
     FormationService formServ;
     @Autowired
-    EtudiantSerice etuServ;
+    EtudiantService etuServ;
 
 
 
