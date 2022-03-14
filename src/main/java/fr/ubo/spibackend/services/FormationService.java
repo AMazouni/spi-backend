@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import fr.ubo.spibackend.exception.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,14 +49,14 @@ public class FormationService {
 		}
 	}
 
-	public ResponseEntity<Formation> getFormationById(String id) {
+	public Formation getFormationById(String id) throws ServiceException {
 		Optional<Formation> formation = formationRepository.findById(id);
 
-		if (formation.isPresent()) {
-			return new ResponseEntity<>(formation.get(), HttpStatus.OK);
-		} else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
+		if (formation.isPresent())
+			return  formation.get();
+		throw new ServiceException("Pas de formation avec id ="+id,HttpStatus.NOT_FOUND);
+
+
 	}
 
 	public ResponseEntity<Formation> createFormation(Formation formation) {

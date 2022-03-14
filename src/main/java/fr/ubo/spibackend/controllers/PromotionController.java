@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("promotion")
@@ -46,8 +44,16 @@ public class PromotionController {
             return new ResponseEntity(new RestErrorMessage(e.toString()+" Backend error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
     @GetMapping("/{code}")
-    public ArrayList<Promotion> findByCodeFormationOrderByAnneeUniversitaireDes(@PathVariable String code) throws ServiceException {
-        return promoServ.findByCodeFormationOrderByAnneeUniversitaireDes(code);
+    public ResponseEntity findByCodeFormation(@PathVariable String code)  {
+        try {
+            return new ResponseEntity<ArrayList<Promotion>>(promoServ.findByCodeFormation(code), HttpStatus.OK);
+        }catch(ServiceException e){
+            return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+        }catch (Exception e ){
+            return new ResponseEntity(new RestErrorMessage(e.toString()+" Backend error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -15,8 +15,8 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -33,6 +33,11 @@ public class PromotionService {
 //    EnseigantService ensServ;
     @Autowired
     EnseignantRepository enDao;
+    @Autowired
+    FormationService formServ;
+    @Autowired
+    EtudiantSerice etuServ;
+
 
 
     public List<Promotion> findAll() throws ServiceException {
@@ -64,7 +69,7 @@ public class PromotionService {
 //                   collect(Collectors.toList());
     }
 
-    public ArrayList<Promotion> findByCodeFormationOrderByAnneeUniversitaireDes(String code) throws ServiceException {
+    public ArrayList<Promotion> findByCodeFormation(String code) throws ServiceException {
         ArrayList<Promotion> resultats = promoRepo.findByCodeFormationOrderByAnneeUniversitaireDesc(code);
         if(resultats.size()==0)
             throw new ServiceException("Aucune Promotion pour la focmation (code ="+code+")dans la BD",HttpStatus.NOT_FOUND);
@@ -74,23 +79,28 @@ public class PromotionService {
     }
 
     public Promotion save(Promotion e) throws ServiceException {
-        if(e.getCodeFormation()==null | e.getCodeFormation()==null)
+        if(e.getCodeFormation()==null | e.getAnneeUniversitaire()==null)
             throw new ServiceException("Le code de formation et/ou l'année universitaire sont null",HttpStatus.BAD_REQUEST);
         if(e.getNbMaxEtudiant()<=0)
-            throw new ServiceException("Le nb Max d'étudiant doit être spécifié null",HttpStatus.BAD_REQUEST);
-
-//        try{
-//            //e.setFormationByCodeFormation(formaServ.getFormationById(e.getCodeFormation()));
-//            List<Candidat> populatedCandidats = new ArrayList<Candidat>();
+            throw new ServiceException("Le nb Max d'étudiant doit être spécifié ",HttpStatus.BAD_REQUEST);
+        PromotionPK pk = new PromotionPK(e.getCodeFormation(),e.getAnneeUniversitaire());
+        Optional<Promotion> result= promoRepo.findById(pk);
+        if(result.isPresent()){
+            throw new ServiceException("Une promo similaire existe déjà dans la base de donnée (Année + Formation) ",HttpStatus.BAD_REQUEST);
+        }
+        try{
+            e.setFormationByCodeFormation(formaServ.getFormationById(e.getCodeFormation()));
+            List<Candidat> populatedCandidats = new ArrayList<Candidat>();
 //            for (Candidat c : e.getCandidats()){
 //                populatedCandidats.add(candServ.getCandidatByNoCandidat(c.getNoCandidat()));
 //            }
-//        if(e.getNoEnseignant()!=null)
-//            e.setEnseignantByNoEnseignant(enDao.getById(e.getNoEnseignant()));
-//            e.setEtudiants(new ArrayList<Etudiant>());
-//        }catch (ServiceException ex){
-//            throw new ServiceException("save Promotion exception : "+ex.getErrorMeassage(),ex.getHttpStatus());
-//        }
+            e.setCandidats(populatedCandidats);
+        if(e.getNoEnseignant()!=null)
+            e.setEnseignantByNoEnseignant(enDao.getById(e.getNoEnseignant()));
+            e.setEtudiants(new ArrayList<Etudiant>());
+        }catch (ServiceException ex){
+            throw new ServiceException("save Promotion exception : "+ex.getErrorMeassage(),ex.getHttpStatus());
+        }
 
         return promoRepo.save(e);
     }
@@ -99,10 +109,35 @@ public class PromotionService {
     public Promotion tenirCandidats(String annee, String code) throws ServiceException {
         Promotion promo = this.findById(annee,code);
         List<Candidat>  cand = promo.getCandidats();
-        for(int i=0;i<promo.getNbMaxEtudiant() & i<cand.size();i++){
-            //TODO ; method to save etudiants
-            //TODO ; method to delete candidat .... or make ignored next time
+        //Candidat de la liste principale
+        List<Candidat> candidatsLp = new ArrayList<>();
+        for(Candidat c : cand)
+            if(c.getListeSelection().equalsIgnoreCase("LP"))
+                candidatsLp.add(c);
+
+        //Candidat ayant Confirmation_Candidat=oui
+        List<Candidat> candidatsOui = new ArrayList<>();
+        for(Candidat c : candidatsLp)
+            if(c.getConfirmationCandidat().equalsIgnoreCase("O"))
+                candidatsOui.add(c);
+
+        //Trie des candidats de la liste principale ayant dit oui
+        List<Candidat> sortedCandidats = candidatsOui.stream()
+                .sorted(Comparator.comparing(Candidat::getSelectionNoOrdre))
+                .collect(Collectors.toList());
+
+        //Liste de candidats à migrer
+        List<Candidat> aMigrer = new ArrayList<>();
+        int nbEtudiantRestants = promo.getNbMaxEtudiant() - promo.getEtudiants().size();
+        for(int i=0; i<nbEtudiantRestants & i<sortedCandidats.size();i++)
+            aMigrer.add(sortedCandidats.get(i));
+
+        List<Etudiant> etudiants = etuServ.createEtudiant(aMigrer);
+
+        for(Candidat can: aMigrer){
+            candServ.deleteCandidatByNocandidat(can.getNoCandidat());
         }
+
 
         return promo;
     }
