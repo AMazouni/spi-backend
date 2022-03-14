@@ -23,23 +23,36 @@ public class CandidatService {
     @Autowired
     private CandidatRepository candidatRepo;
 
-    public Candidat saveCandidat(Candidat candidat) throws ServiceException {
-      // Candidat c = candidatRepo.findById(candidat.getNoCandidat()).orElseThrow(()-> new NoSuchElementException());
-            if (candidat.getAdresse() != null && candidat.getAnneeUniversitaire() != null && candidat.getCodeFormation() != null &&
-                    candidat.getCodePostal() != null && candidat.getEmail() != null && candidat.getCodePostal() != null && candidat.getDateNaissance() != null &&
-                    candidat.getLieuNaissance() != null && candidat.getNationalite() != null && candidat.getNom() != null && candidat.getPaysOrigine() != null &&
-                    candidat.getPrenom() != null && candidat.getSexe() != null && candidat.getUniversiteOrigine() != null && candidat.getVille() != null) {
-              //  Candidat c = new Candidat(candidat.getCodeFormation(),candidat.getAnneeUniversitaire(),candidat.getNom(),candidat.getPrenom(),candidat.get);
-                return candidatRepo.save(candidat);
-            }
+    @Autowired
+    PromotionService promotionService;
 
-        throw new ServiceException("Informations manquantes pour l'enregistrement du candidat", HttpStatus.BAD_REQUEST) ;
+    public Candidat saveCandidat(Candidat candidat) throws ServiceException {
+      Candidat c = candidatRepo.findById(candidat.getEmail()).orElseThrow(()-> new NoSuchElementException());
+      if(c!=null)
+          throw new ServiceException("Le candidat "+candidat.getNoCandidat()+" existe déja", HttpStatus.FOUND) ;
+      else {
+          if (candidat.getAdresse() != null && candidat.getAnneeUniversitaire() != null && candidat.getCodeFormation() != null &&
+                  candidat.getCodePostal() != null && candidat.getEmail() != null && candidat.getCodePostal() != null && candidat.getDateNaissance() != null &&
+                  candidat.getLieuNaissance() != null && candidat.getNationalite() != null && candidat.getNom() != null && candidat.getPaysOrigine() != null &&
+                  candidat.getPrenom() != null && candidat.getSexe() != null && candidat.getUniversiteOrigine() != null && candidat.getVille() != null) {
+
+              Promotion p = promotionService.findById(candidat.getAnneeUniversitaire(), candidat.getCodeFormation());
+              candidat.setPromotion(p);
+              return candidatRepo.save(candidat);
+          }
+
+          throw new ServiceException("Informations manquantes pour l'enregistrement du candidat", HttpStatus.BAD_REQUEST);
+      }
 
     }
 
-    public List<Candidat> getAllCandidat(){
+    public List<Candidat> getAllCandidat() throws ServiceException {
       //  List<Candidat> candidats= candidatRepo.findAll().stream().sorted(Comparator.comparing(Candidat::getSelectionNoOrdre)).collect(Collectors.toList());
         List<Candidat> candidats= candidatRepo.findAll();
+        for(Candidat c : candidats) {
+            Promotion p = promotionService.findById(c.getAnneeUniversitaire(), c.getCodeFormation());
+            c.setPromotion(p);
+        }
         if(candidats.size()==0) throw new NoSuchElementException();
         return candidats;
     }

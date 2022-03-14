@@ -26,7 +26,7 @@ public class CandidatController {
     public ResponseEntity<List<Candidat>> findAllCandidat() {
         try {
             return new ResponseEntity(candidatServices.getAllCandidat(), HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (Exception | ServiceException e) {
             return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -34,6 +34,7 @@ public class CandidatController {
     @PostMapping("")
     public ResponseEntity addCandidat(@RequestBody Candidat candidat) {
         try {
+            logger.info("Candidat bien inséré");
             return new ResponseEntity<Candidat>(candidatServices.saveCandidat(candidat), HttpStatus.OK);
         }catch(ServiceException e){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
