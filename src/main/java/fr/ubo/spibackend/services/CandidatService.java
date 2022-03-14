@@ -53,7 +53,8 @@ public class CandidatService {
             Promotion p = promotionService.findById(c.getAnneeUniversitaire(), c.getCodeFormation());
             c.setPromotion(p);
         }
-        if(candidats.size()==0) throw new NoSuchElementException();
+        if(candidats.size()==0)
+            throw new ServiceException("Pas de candidats trouvée",HttpStatus.NOT_FOUND);
         return candidats;
     }
 
