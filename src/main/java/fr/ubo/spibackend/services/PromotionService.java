@@ -88,6 +88,7 @@ public class PromotionService {
         if(result.isPresent()){
             throw new ServiceException("Une promo similaire existe déjà dans la base de donnée (Année + Formation) ",HttpStatus.BAD_REQUEST);
         }
+        //TODO : test dates
         try{
             e.setFormationByCodeFormation(formaServ.getFormationById(e.getCodeFormation()));
             List<Candidat> populatedCandidats = new ArrayList<Candidat>();

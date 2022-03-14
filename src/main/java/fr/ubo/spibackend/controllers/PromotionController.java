@@ -56,7 +56,8 @@ public class PromotionController {
         }
     }
 
-    public ResponseEntity save(Promotion e) throws ServiceException {
+    @PostMapping("/")
+    public ResponseEntity save(@RequestBody Promotion e) throws ServiceException {
 
         try {
             return new ResponseEntity( promoServ.save(e), HttpStatus.OK);
@@ -68,8 +69,8 @@ public class PromotionController {
 
     }
 
-    @Transactional
-    public ResponseEntity tenirCandidats(String annee, String code) throws ServiceException {
+    @PostMapping("/{code}/{annee}/accept")
+    public ResponseEntity tenirCandidats(@PathVariable String annee, @PathVariable String code) throws ServiceException {
 
         try {
             return new ResponseEntity(promoServ.tenirCandidats(annee, code), HttpStatus.OK);
