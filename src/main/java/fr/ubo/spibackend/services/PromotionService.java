@@ -14,10 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,7 +59,7 @@ public class PromotionService {
     }
 
     private Promotion orderCandidats(Promotion promo){
-            promo.setCandidats(promo.getCandidats().stream().sorted((Candidat a, Candidat b) ->SortEntites.compareCandidats(a,b)).collect(Collectors.toList()));
+            promo.setCandidats(promo.getCandidats().stream().sorted(SortEntites::compareCandidats).collect(Collectors.toList()));
             return promo;
 //           List<Candidat> candidats=promo.getCandidats().stream().sorted((o1, o2)->o1.getListeSelection().
 //                           compareTo(o2.getListeSelection())).
@@ -88,26 +85,33 @@ public class PromotionService {
         if(result.isPresent()){
             throw new ServiceException("Une promo similaire existe déjà dans la base de donnée (Année + Formation) ",HttpStatus.BAD_REQUEST);
         }
-        //TODO : test dates
+        if(e.getDateRentree()==null | e.getDateReponseLp()==null | e.getDateReponseLalp()==null)
+            throw new ServiceException("La promotion doit inclure les dates de Réponse LP,de réponse LA et de la rentrée",HttpStatus.BAD_REQUEST);
+        if(!(e.getDateReponseLp().before(e.getDateReponseLalp()) & e.getDateReponseLalp().before(e.getDateRentree())))
+            throw new ServiceException("Les dates ne respectent pas les contraintes imposées (Date Liste Principale < Date Liste Attente < Date Rentrére ",HttpStatus.BAD_REQUEST);
+
+        //TODO : processus stage
         try{
             e.setFormationByCodeFormation(formaServ.getFormationById(e.getCodeFormation()));
-            List<Candidat> populatedCandidats = new ArrayList<Candidat>();
+            List<Candidat> populatedCandidats = new ArrayList<>();
 //            for (Candidat c : e.getCandidats()){
 //                populatedCandidats.add(candServ.getCandidatByNoCandidat(c.getNoCandidat()));
 //            }
             e.setCandidats(populatedCandidats);
         if(e.getNoEnseignant()!=null)
-            e.setEnseignantByNoEnseignant(enDao.getById(e.getNoEnseignant()));
+            e.setEnseignantByNoEnseignant(enDao.findById(e.getNoEnseignant()).get());
             e.setEtudiants(new ArrayList<Etudiant>());
         }catch (ServiceException ex){
             throw new ServiceException("save Promotion exception : "+ex.getErrorMeassage(),ex.getHttpStatus());
+        }catch (NoSuchElementException ex){
+            throw new ServiceException("save Promotion exception : No such Element Enseignant"+ex.getMessage(),HttpStatus.BAD_REQUEST);
         }
 
         return promoRepo.save(e);
     }
 
     @Transactional
-    public Promotion tenirCandidats(String annee, String code) throws ServiceException {
+    public Promotion accepterCandidats(String annee, String code) throws ServiceException {
         Promotion promo = this.findById(annee,code);
         List<Candidat>  cand = promo.getCandidats();
         //Candidat de la liste principale
@@ -144,6 +148,8 @@ public class PromotionService {
          catch(ServiceException ex){
                 throw new ServiceException("Cannot sort candidat due to null Selection_Ordre : "+ex.getErrorMeassage(),ex.getHttpStatus());
             }
+        promo = this.findById(annee,code);
+
 
         return promo;
     }
