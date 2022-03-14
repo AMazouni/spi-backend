@@ -12,5 +12,5 @@ import java.util.List;
 @Repository
 @RepositoryRestResource(path = "candidat")
 public interface CandidatRepository extends JpaRepository<Candidat, String> {
-
+Candidat findByEmail(String email);
 }

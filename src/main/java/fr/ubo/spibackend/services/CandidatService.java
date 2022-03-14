@@ -27,24 +27,23 @@ public class CandidatService {
     PromotionService promotionService;
 
     public Candidat saveCandidat(Candidat candidat) throws ServiceException {
-      Candidat c = candidatRepo.findById(candidat.getEmail()).orElse(null);
+      Candidat c = candidatRepo.findByEmail(candidat.getEmail());
       if(c!=null)
           throw new ServiceException("Le candidat "+candidat.getNoCandidat()+" existe déja", HttpStatus.FOUND) ;
-      else {
-          if (candidat.getAdresse() != null && candidat.getAnneeUniversitaire() != null && candidat.getCodeFormation() != null &&
+
+      if (candidat.getAdresse() != null && candidat.getAnneeUniversitaire() != null && candidat.getCodeFormation() != null &&
                   candidat.getCodePostal() != null && candidat.getEmail() != null && candidat.getCodePostal() != null && candidat.getDateNaissance() != null &&
                   candidat.getLieuNaissance() != null && candidat.getNationalite() != null && candidat.getNom() != null && candidat.getPaysOrigine() != null &&
-                  candidat.getPrenom() != null && candidat.getSexe() != null && candidat.getUniversiteOrigine() != null && candidat.getVille() != null) {
-
-              Promotion p = promotionService.findById(candidat.getAnneeUniversitaire(), candidat.getCodeFormation());
+                  candidat.getPrenom() != null && candidat.getSexe() != null && candidat.getUniversiteOrigine() != null && candidat.getVille() != null)
+               {
+                   Promotion p = promotionService.findById(candidat.getAnneeUniversitaire(), candidat.getCodeFormation());
               candidat.setPromotion(p);
               return candidatRepo.save(candidat);
-          }
+              }
 
           throw new ServiceException("Informations manquantes pour l'enregistrement du candidat", HttpStatus.BAD_REQUEST);
       }
 
-    }
 
     public List<Candidat> getAllCandidat() throws ServiceException {
       //  List<Candidat> candidats= candidatRepo.findAll().stream().sorted(Comparator.comparing(Candidat::getSelectionNoOrdre)).collect(Collectors.toList());
