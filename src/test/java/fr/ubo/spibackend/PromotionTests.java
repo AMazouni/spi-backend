@@ -1,10 +1,13 @@
 package fr.ubo.spibackend;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,12 +40,14 @@ public class PromotionTests {
 	PromotionRepository mockRepository;
 	
 	public Promotion getPromo() {
+		Date date = new Date();
 		Promotion promotion = new Promotion();
 		promotion.setCodeFormation("12234");
 		promotion.setAnneeUniversitaire("2021-2022");
 		List <Candidat> candidats= new ArrayList<>();
 		candidats.add(new Candidat());
 		promotion.setCandidats(candidats);
+		
 		return promotion;
 	}
 /* 
@@ -127,7 +132,7 @@ public class PromotionTests {
  		List<Promotion> listPromotionsResult= promotionService.findAll();
  		
  		assertEquals(listPromotionsResult,listPromotions);
- 		verify(mockRepository, times(1));
+ 		//verify(mockRepository, times(1));
  	
 	}
 	
@@ -161,5 +166,28 @@ public class PromotionTests {
 		assertEquals(promotionResults,listPromotions);
 
 	}
+	
+	@Test
+	public void savePromotion() throws ServiceException {
+		ServiceException s= new ServiceException();
+		Promotion promotion = this.getPromo();
+		PromotionPK pk= new PromotionPK(promotion.getCodeFormation(),promotion.getAnneeUniversitaire());
+		Mockito.when(mockRepository.findById(pk)).thenReturn(Optional.of(promotion));
+		
+		ServiceException thrown = assertThrows(
+				ServiceException.class,
+	            () -> promotionService.save(promotion),
+	            "Expected save() to throw, but it didn't"
+	     );
+		assertTrue(thrown.getErrorMeassage().equals("Le nb Max d'étudiant doit être spécifié "));
+		
+	}
+	
+	 @Test
+	 void accepterCandidats() {
+		 
+	 }
+	
+
 	
 }
