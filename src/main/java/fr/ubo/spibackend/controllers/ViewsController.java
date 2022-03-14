@@ -1,55 +1,59 @@
 package fr.ubo.spibackend.controllers;
 
-import fr.ubo.spibackend.entities.VAbbr;
+import fr.ubo.spibackend.entities.DomaineViews;
 import fr.ubo.spibackend.repositories.vues.ViewsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
-@RequestMapping("/views")
+@RequestMapping("domaine")
+@RestController
+@CrossOrigin(origins="*")
 public class ViewsController {
 
     @Autowired
     ViewsRepository vr;
      @GetMapping("universite")
-    public ArrayList<VAbbr> findAllUniversite() {
+    public ArrayList<DomaineViews> findAllUniversite() {
         return vr.findAllUniversite();
     }
 @GetMapping("typeens")
-    public ArrayList<VAbbr> findAllTypeEnseignant() {
+    public ArrayList<DomaineViews> findAllTypeEnseignant() {
         return vr.findAllTypeEnseignant();
     }
 @GetMapping("sexe")
-    public ArrayList<VAbbr> findAllSexe() {
+    public ArrayList<DomaineViews> findAllSexe() {
         return vr.findAllSexe();
     }
 @GetMapping("stage")
-    public ArrayList<VAbbr> findAllProcessStage() {
+    public ArrayList<DomaineViews> findAllProcessStage() {
         return vr.findAllProcessStage();
     }
 @GetMapping("positionnement")
-    public ArrayList<VAbbr> findAllPosition() {
+    public ArrayList<DomaineViews> findAllPosition() {
         return vr.findAllPosition();
     }
     @GetMapping("pays")
-    public ArrayList<VAbbr> findAllPays() {
+    public ArrayList<DomaineViews> findAllPays() {
         return vr.findAllPays();
     }
     @GetMapping("ouinon")
-    public ArrayList<VAbbr> findAllOuiNon() {
+    public ArrayList<DomaineViews> findAllOuiNon() {
         return vr.findAllOuiNon();
     }
     @GetMapping("listeselection")
-    public ArrayList<VAbbr> findAllListSelec() {
+    public ArrayList<DomaineViews> findAllListSelec() {
         return vr.findAllListSelec();
     }
     @GetMapping("etatevaluation")
-    public ArrayList<VAbbr> findAllEtatEvaluation() {
+    public ArrayList<DomaineViews> findAllEtatEvaluation() {
         return vr.findAllEtatEvaluation();
     }
     @GetMapping("diplome")
-    public ArrayList<VAbbr> findAllDiplome() {
+    public ArrayList<DomaineViews> findAllDiplome() {
         return vr.findAllDiplome();
     }
 }

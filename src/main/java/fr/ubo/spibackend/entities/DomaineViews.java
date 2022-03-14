@@ -5,20 +5,24 @@ import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
-public class VAbbr {
-    @Id
+public class DomaineViews {
+     @Id
     private String code;
 
     private String abreviation;
     private String signification;
 
-    public VAbbr() {
+    public DomaineViews() {
     }
 
-    public VAbbr(String code, String abreviation, String signification) {
+    public DomaineViews(String code, String abreviation, String signification) {
         this.code = code;
         this.abreviation = abreviation;
         this.signification = signification;
+    }
+
+    public String getCode() {
+        return code;
     }
 
     public void setCode(String code) {
@@ -43,7 +47,7 @@ public class VAbbr {
 
     @Override
     public String toString() {
-        return "VAbbr{" +
+        return "DomaineViews{" +
                 "code='" + code + '\'' +
                 ", abreviation='" + abreviation + '\'' +
                 ", signification='" + signification + '\'' +
@@ -54,7 +58,7 @@ public class VAbbr {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        VAbbr that = (VAbbr) o;
+        DomaineViews that = (DomaineViews) o;
         return Objects.equals(code, that.code) && Objects.equals(abreviation, that.abreviation) && Objects.equals(signification, that.signification);
     }
 
