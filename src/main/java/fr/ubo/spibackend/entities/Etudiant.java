@@ -2,6 +2,7 @@ package fr.ubo.spibackend.entities;
 
 import java.math.BigInteger;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Objects;
 
 import javax.persistence.Basic;
@@ -39,7 +40,7 @@ public class Etudiant {
 	private String sexe;
 	@Basic
 	@Column(name = "DATE_NAISSANCE", nullable = false)
-	private Date dateNaissance;
+	private LocalDate dateNaissance;
 	@Basic
 	@Column(name = "LIEU_NAISSANCE", nullable = false, length = 255)
 	private String lieuNaissance;
@@ -92,7 +93,7 @@ public class Etudiant {
 	}
 
 	public Etudiant(String noEtudiant, String codeFormation, String anneeUniversitaire, String nom, String prenom,
-			String sexe, Date dateNaissance, String lieuNaissance, String nationalite, String telephone, String mobile,
+			String sexe, LocalDate dateNaissance, String lieuNaissance, String nationalite, String telephone, String mobile,
 			String email, String adresse, String codePostal, String ville, String paysOrigine, String universiteOrigine,
 			Promotion promotionEtudiant) {
 		super();
@@ -172,11 +173,11 @@ public class Etudiant {
 		this.sexe = sexe;
 	}
 
-	public Date getDateNaissance() {
+	public LocalDate getDateNaissance() {
 		return dateNaissance;
 	}
 
-	public void setDateNaissance(Date dateNaissance) {
+	public void setDateNaissance(LocalDate dateNaissance) {
 		this.dateNaissance = dateNaissance;
 	}
 
