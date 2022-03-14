@@ -15,13 +15,13 @@ import java.util.ArrayList;
 
 @RestController
 @CrossOrigin(origins="*")
-@RequestMapping("promotion")
+@RequestMapping("promotions")
 public class PromotionController {
 
     @Autowired
     PromotionService promoServ;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity findAll(){
 
         try {
@@ -64,7 +64,7 @@ public class PromotionController {
         }catch(ServiceException ex){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(ex.getErrorMeassage()), ex.getHttpStatus());
         }catch (Exception ex ){
-            return new ResponseEntity(new RestErrorMessage(ex.toString()+" Backend error"), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(new RestErrorMessage(ex.getMessage()+" Backend error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -77,7 +77,7 @@ public class PromotionController {
         }catch(ServiceException e){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
         }catch (Exception e ){
-            return new ResponseEntity(new RestErrorMessage(e.toString()+" Backend error"), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(new RestErrorMessage(e.getMessage()+" :  Backend error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
