@@ -27,7 +27,7 @@ public class CandidatService {
     PromotionService promotionService;
 
     public Candidat saveCandidat(Candidat candidat) throws ServiceException {
-      Candidat c = candidatRepo.findById(candidat.getEmail()).orElseThrow(()-> new NoSuchElementException());
+      Candidat c = candidatRepo.findById(candidat.getEmail()).orElse(null);
       if(c!=null)
           throw new ServiceException("Le candidat "+candidat.getNoCandidat()+" existe déja", HttpStatus.FOUND) ;
       else {
