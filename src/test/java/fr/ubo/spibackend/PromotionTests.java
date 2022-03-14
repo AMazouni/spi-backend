@@ -3,7 +3,7 @@ package fr.ubo.spibackend;
 import fr.ubo.spibackend.controllers.PromotionController;
 import fr.ubo.spibackend.repositories.PromotionRepository;
 import fr.ubo.spibackend.services.PromotionService;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -31,13 +32,13 @@ public class PromotionTests {
     @Autowired
     PromotionRepository promoRep;
     @Test
-    void contextLoads() {
+    public void contextLoads() {
         assert promoSer!=null;
         assert mvc!=null;
         assert promoCont!=null;
     }
      @Test
-    void findAll() throws Exception  {
+    public void findAll() throws Exception  {
 //        return promoSer.findAll();
          mvc.perform( MockMvcRequestBuilders
                          .get("/promotion/")
