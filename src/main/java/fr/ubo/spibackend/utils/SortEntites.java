@@ -8,11 +8,12 @@ public class SortEntites {
 
     public static int compareCandidats(Candidat a, Candidat b){
 
-        String x1 = a.getListeSelection();
-        String x2 = a.getListeSelection();
+        Integer x1 = selectionListComparator(a.getListeSelection());
+        Integer x2 = selectionListComparator(b.getListeSelection());
         int sComp = x1.compareTo(x2);
 
         if (sComp != 0) {
+            System.out.println("scomp liste "+x1+x2+"=="+sComp);
             return sComp;
         }
 
@@ -20,6 +21,7 @@ public class SortEntites {
         BigInteger n2 = b.getSelectionNoOrdre()==null? BigInteger.valueOf(0) :b.getSelectionNoOrdre();
         sComp = n1.compareTo(n2);
         if (sComp != 0) {
+            System.out.println("scomp SelectionOrdre "+n1+n2+"=="+sComp);
             return sComp;
         }
         String ida = a.getNoCandidat();
@@ -28,5 +30,18 @@ public class SortEntites {
         return ida.compareTo(idb);
 
 
+    }
+
+    private static int selectionListComparator(String ls){
+        switch (ls){
+            case "LP":
+                return 1;
+            case "LA":
+                return 2;
+            case "NR":
+                return 3;
+            default:
+                return 1000;
+        }
     }
 }

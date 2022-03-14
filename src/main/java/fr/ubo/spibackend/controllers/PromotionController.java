@@ -8,11 +8,15 @@ import fr.ubo.spibackend.services.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
-@CrossOrigin(origins="*")
 @RestController
 @RequestMapping("promotion")
 public class PromotionController {
@@ -25,10 +29,10 @@ public class PromotionController {
 
         try {
             return new ResponseEntity(promoServ.findAll(), HttpStatus.OK);
-        }catch(ServiceException e){
-            return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
         }catch (Exception e ){
-            return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(new RestErrorMessage(e.toString()+" Backend error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        } catch (ServiceException e) {
+            return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getMessage()), e.getHttpStatus());
         }
     }
 
@@ -39,17 +43,11 @@ public class PromotionController {
         }catch(ServiceException e){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
         }catch (Exception e ){
-            return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity(new RestErrorMessage(e.toString()+" Backend error"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("/{code}")
-    public ResponseEntity findByCode(@PathVariable String code) {
-        try {
-            return new ResponseEntity(promoServ.findByCodeFormationOrderByAnneeUniversitaireDes(code), HttpStatus.OK);
-        }catch(ServiceException e){
-            return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
-        }catch (Exception e ){
-            return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ArrayList<Promotion> findByCodeFormationOrderByAnneeUniversitaireDes(@PathVariable String code) throws ServiceException {
+        return promoServ.findByCodeFormationOrderByAnneeUniversitaireDes(code);
     }
 }
