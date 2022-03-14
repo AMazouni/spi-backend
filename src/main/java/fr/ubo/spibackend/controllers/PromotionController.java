@@ -8,14 +8,13 @@ import fr.ubo.spibackend.services.PromotionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 
 @RestController
+@CrossOrigin(origins="*")
 @RequestMapping("promotion")
 public class PromotionController {
 
@@ -50,6 +49,30 @@ public class PromotionController {
     public ResponseEntity findByCodeFormation(@PathVariable String code)  {
         try {
             return new ResponseEntity<ArrayList<Promotion>>(promoServ.findByCodeFormation(code), HttpStatus.OK);
+        }catch(ServiceException e){
+            return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+        }catch (Exception e ){
+            return new ResponseEntity(new RestErrorMessage(e.toString()+" Backend error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public ResponseEntity save(Promotion e) throws ServiceException {
+
+        try {
+            return new ResponseEntity( promoServ.save(e), HttpStatus.OK);
+        }catch(ServiceException ex){
+            return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(ex.getErrorMeassage()), ex.getHttpStatus());
+        }catch (Exception ex ){
+            return new ResponseEntity(new RestErrorMessage(ex.toString()+" Backend error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @Transactional
+    public ResponseEntity tenirCandidats(String annee, String code) throws ServiceException {
+
+        try {
+            return new ResponseEntity(promoServ.tenirCandidats(annee, code), HttpStatus.OK);
         }catch(ServiceException e){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
         }catch (Exception e ){

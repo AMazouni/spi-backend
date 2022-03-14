@@ -40,7 +40,7 @@ public class PromotionTests {
     void findAll() throws Exception  {
 //        return promoSer.findAll();
          mvc.perform( MockMvcRequestBuilders
-                         .get("/promotion")
+                         .get("/promotion/")
                          .contentType(MediaType.APPLICATION_JSON)
                          .accept(MediaType.APPLICATION_JSON))
                  .andExpect(status().isOk())
@@ -62,10 +62,24 @@ public class PromotionTests {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
-//
-//    public ArrayList<Promotion> findByCodeFormation(String code) throws ServiceException {
+@Test
+    public void findByCodeFormation_Ok() throws Exception {
 //        return promoSer.findByCodeFormation(code);
-//    }
+    mvc.perform( MockMvcRequestBuilders
+                    .get("/promotion/M2DOSI")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
+    }
+    @Test
+    public void findByCodeFormation_NOTOk() throws Exception {
+//        return promoSer.findByCodeFormation(code);
+        mvc.perform( MockMvcRequestBuilders
+                        .get("/promotion/BADCODE")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 //
 //    public Promotion save(Promotion e) throws ServiceException {
 //        return promoSer.save(e);

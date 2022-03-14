@@ -11,8 +11,6 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "CANDIDAT", schema = "DOSI", catalog = "")
 public class Candidat{
@@ -88,6 +86,37 @@ public class Candidat{
     @JoinColumns({ @JoinColumn(name = "ANNEE_UNIVERSITAIRE", referencedColumnName = "ANNEE_UNIVERSITAIRE",insertable = false,updatable = false),
             @JoinColumn(name = "CODE_FORMATION", referencedColumnName = "CODE_FORMATION",insertable = false,updatable = false) })
     private Promotion promotion;
+
+
+
+    public Candidat() {
+        super();
+    }
+
+    public Candidat(String noCandidat, String codeFormation, String anneeUniversitaire, String nom, String prenom, String sexe, LocalDate dateNaissance, String lieuNaissance, String nationalite, String telephone, String mobile, String email, String adresse, String codePostal, String ville, String paysOrigine, String universiteOrigine, String listeSelection, BigInteger selectionNoOrdre, String confirmationCandidat, LocalDate dateReponseCandidat, Promotion promotion) {
+        this.noCandidat = noCandidat;
+        this.codeFormation = codeFormation;
+        this.anneeUniversitaire = anneeUniversitaire;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.sexe = sexe;
+        this.dateNaissance = dateNaissance;
+        this.lieuNaissance = lieuNaissance;
+        this.nationalite = nationalite;
+        this.telephone = telephone;
+        this.mobile = mobile;
+        this.email = email;
+        this.adresse = adresse;
+        this.codePostal = codePostal;
+        this.ville = ville;
+        this.paysOrigine = paysOrigine;
+        this.universiteOrigine = universiteOrigine;
+        this.listeSelection = listeSelection;
+        this.selectionNoOrdre = selectionNoOrdre;
+        this.confirmationCandidat = confirmationCandidat;
+        this.dateReponseCandidat = dateReponseCandidat;
+        this.promotion = promotion;
+    }
 
     public Candidat(String codeFormation, String anneeUniversitaire, String nom, String prenom, String sexe, LocalDate dateNaissance, String lieuNaissance, String nationalite, String telephone, String mobile, String email, String adresse, String codePostal, String ville, String paysOrigine, String universiteOrigine, String listeSelection) {
         this.codeFormation = codeFormation;
