@@ -8,48 +8,71 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import fr.ubo.spibackend.entities.Formation;
+import fr.ubo.spibackend.exception.RestErrorMessage;
+import fr.ubo.spibackend.exception.ServiceException;
 import fr.ubo.spibackend.services.FormationService;
 
 @RestController
 @CrossOrigin(origins="*")
-@RequestMapping(path = "/v1/api/formations")
+@RequestMapping(path = "/formations")
 public class FormationController {
 
 	@Autowired
 	private FormationService formationService;
 
-	/*@GetMapping
-	public ResponseEntity<List<Formation>> getAllFormations() {
-		return formationService.getAllFormations();
+	@GetMapping
+	public ResponseEntity getAllFormations() {
+		try {
+			return new ResponseEntity<List<Formation>>(formationService.getAllFormations(), HttpStatus.OK);
+		} catch (ServiceException e) {
+			return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+		} catch (Exception e) {
+			return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
-	/*@GetMapping("/{id}")
-	public ResponseEntity<Formation> getClientById(@PathVariable("id") String id) {
-		return formationService.getFormationById(id);
-	}*/
+	@GetMapping("/{id}")
+	public ResponseEntity getFormationById(@PathVariable("id") String id) {
+		try {
+			return new ResponseEntity<Formation>(formationService.getFormationById(id), HttpStatus.OK);
+		} catch (ServiceException e) {
+			return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+		} catch (Exception e) {
+			return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
-	@GetMapping("/nom/{nomFormation}")
-	public ResponseEntity<List<Formation>> getByNomFormation(@PathVariable("nomFormation") String nomFormation) {
-		return formationService.getByNomFormation(nomFormation);
+	@GetMapping("/searchByCodeOrNom/{input}")
+	public ResponseEntity getByNomFormation(@PathVariable("input") String input) {
+		try {
+			return new ResponseEntity<List<Formation>>(formationService.searchByCodeOrNom(input), HttpStatus.OK);
+		} catch (ServiceException e) {
+			return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+		} catch (Exception e) {
+			return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@PostMapping
-	public ResponseEntity<Formation> createFormation(@RequestBody Formation formation) {
-		return formationService.createFormation(formation);
-	}
-
-	@PutMapping("/{id}")
-	public ResponseEntity<Formation> updateFormation(@PathVariable("id") String id, @RequestBody Formation client) {
-		return formationService.updateFormation(id, client);
+	public ResponseEntity createFormation(@RequestBody Formation formation) {
+		try {
+			return new ResponseEntity<Formation>(formationService.createFormation(formation), HttpStatus.OK);
+		} catch (ServiceException e) {
+			return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+		} catch (Exception e) {
+			return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<HttpStatus> deleteFormation(@PathVariable("id") String id) {
-		return formationService.deleteFormation(id);
-	}
-
-	@DeleteMapping
-	public ResponseEntity<HttpStatus> deleteAllFormations() {
-		return formationService.deleteAllFormations();
+	public ResponseEntity deleteFormation(@PathVariable("id") String id) {
+		try {
+			formationService.deleteFormation(id);
+			return new ResponseEntity(null, HttpStatus.OK);
+		} catch (ServiceException e) {
+			return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+		} catch (Exception e) {
+			return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 }
