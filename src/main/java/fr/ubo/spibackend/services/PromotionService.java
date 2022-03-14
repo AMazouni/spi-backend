@@ -122,23 +122,28 @@ public class PromotionService {
             if(c.getConfirmationCandidat().equalsIgnoreCase("O"))
                 candidatsOui.add(c);
 
-        //Trie des candidats de la liste principale ayant dit oui
-        List<Candidat> sortedCandidats = candidatsOui.stream()
-                .sorted(Comparator.comparing(Candidat::getSelectionNoOrdre))
-                .collect(Collectors.toList());
+        try {
+            //Trie des candidats de la liste principale ayant dit oui
+            //TODO: s'assurer que les Selection_ORDRE ne soit pas null dans la base de données
+            List<Candidat> sortedCandidats = candidatsOui.stream()
+                    .sorted(Comparator.comparing(Candidat::getSelectionNoOrdre))
+                    .collect(Collectors.toList());
 
-        //Liste de candidats à migrer
-        List<Candidat> aMigrer = new ArrayList<>();
-        int nbEtudiantRestants = promo.getNbMaxEtudiant() - promo.getEtudiants().size();
-        for(int i=0; i<nbEtudiantRestants & i<sortedCandidats.size();i++)
-            aMigrer.add(sortedCandidats.get(i));
+            //Liste de candidats à migrer
+            List<Candidat> aMigrer = new ArrayList<>();
+            int nbEtudiantRestants = promo.getNbMaxEtudiant() - promo.getEtudiants().size();
+            for (int i = 0; i < nbEtudiantRestants & i < sortedCandidats.size(); i++)
+                aMigrer.add(sortedCandidats.get(i));
 
-        List<Etudiant> etudiants = etuServ.createEtudiant(aMigrer);
+            List<Etudiant> etudiants = etuServ.createEtudiant(aMigrer);
 
-        for(Candidat can: aMigrer){
-            candServ.deleteCandidatByNocandidat(can.getNoCandidat());
+            for (Candidat can : aMigrer) {
+                candServ.deleteCandidatByNocandidat(can.getNoCandidat());
+            }
         }
-
+         catch(ServiceException ex){
+                throw new ServiceException("Cannot sort candidat due to null Selection_Ordre : "+ex.getErrorMeassage(),ex.getHttpStatus());
+            }
 
         return promo;
     }
