@@ -59,7 +59,7 @@ public class PromotionService {
     }
 
     private Promotion orderCandidats(Promotion promo){
-            promo.setCandidats(promo.getCandidats().stream().sorted((Candidat a, Candidat b) ->SortEntites.compareCandidats(a,b)).collect(Collectors.toList()));
+            promo.setCandidats(promo.getCandidats().stream().sorted(SortEntites::compareCandidats).collect(Collectors.toList()));
             return promo;
 //           List<Candidat> candidats=promo.getCandidats().stream().sorted((o1, o2)->o1.getListeSelection().
 //                           compareTo(o2.getListeSelection())).
@@ -93,7 +93,7 @@ public class PromotionService {
         //TODO : processus stage
         try{
             e.setFormationByCodeFormation(formaServ.getFormationById(e.getCodeFormation()));
-            List<Candidat> populatedCandidats = new ArrayList<Candidat>();
+            List<Candidat> populatedCandidats = new ArrayList<>();
 //            for (Candidat c : e.getCandidats()){
 //                populatedCandidats.add(candServ.getCandidatByNoCandidat(c.getNoCandidat()));
 //            }
@@ -111,7 +111,7 @@ public class PromotionService {
     }
 
     @Transactional
-    public Promotion tenirCandidats(String annee, String code) throws ServiceException {
+    public Promotion accepterCandidats(String annee, String code) throws ServiceException {
         Promotion promo = this.findById(annee,code);
         List<Candidat>  cand = promo.getCandidats();
         //Candidat de la liste principale
@@ -142,6 +142,7 @@ public class PromotionService {
         for(Candidat can: aMigrer){
             candServ.deleteCandidatByNocandidat(can.getNoCandidat());
         }
+        promo = this.findById(annee,code);
 
 
         return promo;
