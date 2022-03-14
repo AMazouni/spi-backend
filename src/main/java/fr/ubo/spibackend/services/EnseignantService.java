@@ -6,6 +6,7 @@ import fr.ubo.spibackend.entities.Promotion;
 import fr.ubo.spibackend.exception.ServiceException;
 import fr.ubo.spibackend.repositories.EnseignantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
@@ -22,7 +23,7 @@ public class EnseignantService {
     public List<Enseignant> getAllEnseignant() throws ServiceException {
         List<Enseignant> enseignants= enseignantRepo.findAll().stream().sorted(Comparator.comparing(Enseignant::getNom)).collect(Collectors.toList());
 
-        if(enseignants.size()==0) throw new NoSuchElementException();
+        if(enseignants.size()==0) throw new ServiceException("Aucun enseignant trouvé", HttpStatus.NOT_FOUND);
         return enseignants;
     }
 }

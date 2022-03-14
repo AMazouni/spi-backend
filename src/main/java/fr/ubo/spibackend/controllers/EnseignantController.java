@@ -28,7 +28,10 @@ public class EnseignantController {
     public ResponseEntity<List<Enseignant>> findAllEnseignant() {
         try {
             return new ResponseEntity(enseignantServices.getAllEnseignant(), HttpStatus.OK);
-        } catch (Exception | ServiceException e) {
+        } catch (ServiceException e){
+            return new ResponseEntity(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+        }
+        catch (Exception  e) {
             return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
