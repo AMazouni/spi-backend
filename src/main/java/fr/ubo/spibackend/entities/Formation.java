@@ -1,101 +1,130 @@
 package fr.ubo.spibackend.entities;
 
-import javax.persistence.*;
 import java.sql.Date;
 import java.util.Objects;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "FORMATION", schema = "DOSI", catalog = "")
 public class Formation {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "CODE_FORMATION", nullable = false, length = 8)
-    private String codeFormation;
-    @Basic
-    @Column(name = "DIPLOME", nullable = false, length = 3)
-    private String diplome;
-    @Basic
-    @Column(name = "N0_ANNEE", nullable = false, precision = 0)
-    private boolean n0Annee;
-    @Basic
-    @Column(name = "NOM_FORMATION", nullable = false, length = 64)
-    private String nomFormation;
-    @Basic
-    @Column(name = "DOUBLE_DIPLOME", nullable = false, length = 1)
-    private String doubleDiplome;
-    @Basic
-    @Column(name = "DEBUT_ACCREDITATION", nullable = true)
-    private Date debutAccreditation;
-    @Basic
-    @Column(name = "FIN_ACCREDITATION", nullable = true)
-    private Date finAccreditation;
+	@Id
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	@Column(name = "CODE_FORMATION", nullable = false, length = 50)
+	private String codeFormation;
+	@Basic
+	@Column(name = "DIPLOME", nullable = false, length = 3)
+	private String diplome;
+	@Basic
+	@Column(name = "N0_ANNEE", nullable = false, precision = 0)
+	private int n0Annee;
+	@Basic
+	@Column(name = "NOM_FORMATION", nullable = false, length = 64)
+	private String nomFormation;
+	@Basic
+	@Column(name = "DOUBLE_DIPLOME", nullable = false, length = 1)
+	private String doubleDiplome;
+	@Basic
+	@Column(name = "DEBUT_ACCREDITATION", nullable = true)
+	private Date debutAccreditation;
+	@Basic
+	@Column(name = "FIN_ACCREDITATION", nullable = true)
+	private Date finAccreditation;
 
-    public String getCodeFormation() {
-        return codeFormation;
-    }
+	public String getCodeFormation() {
+		return codeFormation;
+	}
 
-    public void setCodeFormation(String codeFormation) {
-        this.codeFormation = codeFormation;
-    }
+	public void setCodeFormation(String codeFormation) {
+		this.codeFormation = codeFormation;
+	}
 
-    public String getDiplome() {
-        return diplome;
-    }
+	public String getDiplome() {
+		return diplome;
+	}
 
-    public void setDiplome(String diplome) {
-        this.diplome = diplome;
-    }
+	public void setDiplome(String diplome) {
+		this.diplome = diplome;
+	}
 
-    public boolean isN0Annee() {
-        return n0Annee;
-    }
+	public int getN0Annee() {
+		return n0Annee;
+	}
 
-    public void setN0Annee(boolean n0Annee) {
-        this.n0Annee = n0Annee;
-    }
+	public void setN0Annee(int n0Annee) {
+		this.n0Annee = n0Annee;
+	}
 
-    public String getNomFormation() {
-        return nomFormation;
-    }
+	public String getNomFormation() {
+		return nomFormation;
+	}
 
-    public void setNomFormation(String nomFormation) {
-        this.nomFormation = nomFormation;
-    }
+	public void setNomFormation(String nomFormation) {
+		this.nomFormation = nomFormation;
+	}
 
-    public String getDoubleDiplome() {
-        return doubleDiplome;
-    }
+	public String getDoubleDiplome() {
+		return doubleDiplome;
+	}
 
-    public void setDoubleDiplome(String doubleDiplome) {
-        this.doubleDiplome = doubleDiplome;
-    }
+	public void setDoubleDiplome(String doubleDiplome) {
+		this.doubleDiplome = doubleDiplome;
+	}
 
-    public Date getDebutAccreditation() {
-        return debutAccreditation;
-    }
+	public Date getDebutAccreditation() {
+		return debutAccreditation;
+	}
 
-    public void setDebutAccreditation(Date debutAccreditation) {
-        this.debutAccreditation = debutAccreditation;
-    }
+	public void setDebutAccreditation(Date debutAccreditation) {
+		this.debutAccreditation = debutAccreditation;
+	}
 
-    public Date getFinAccreditation() {
-        return finAccreditation;
-    }
+	public Date getFinAccreditation() {
+		return finAccreditation;
+	}
 
-    public void setFinAccreditation(Date finAccreditation) {
-        this.finAccreditation = finAccreditation;
-    }
+	public void setFinAccreditation(Date finAccreditation) {
+		this.finAccreditation = finAccreditation;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Formation that = (Formation) o;
-        return n0Annee == that.n0Annee && Objects.equals(codeFormation, that.codeFormation) && Objects.equals(diplome, that.diplome) && Objects.equals(nomFormation, that.nomFormation) && Objects.equals(doubleDiplome, that.doubleDiplome) && Objects.equals(debutAccreditation, that.debutAccreditation) && Objects.equals(finAccreditation, that.finAccreditation);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
+		Formation that = (Formation) o;
+		return n0Annee == that.n0Annee && Objects.equals(codeFormation, that.codeFormation)
+				&& Objects.equals(diplome, that.diplome) && Objects.equals(nomFormation, that.nomFormation)
+				&& Objects.equals(doubleDiplome, that.doubleDiplome)
+				&& Objects.equals(debutAccreditation, that.debutAccreditation)
+				&& Objects.equals(finAccreditation, that.finAccreditation);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(codeFormation, diplome, n0Annee, nomFormation, doubleDiplome, debutAccreditation, finAccreditation);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(codeFormation, diplome, n0Annee, nomFormation, doubleDiplome, debutAccreditation,
+				finAccreditation);
+	}
+
+	public Formation(String nomFormation, int n0Annee, String diplome, String doubleDiplome, Date debutAccreditation,
+			Date finAccreditation) {
+		this.diplome = diplome;
+		this.n0Annee = n0Annee;
+		this.nomFormation = nomFormation;
+		this.doubleDiplome = doubleDiplome;
+		this.debutAccreditation = debutAccreditation;
+		this.finAccreditation = finAccreditation;
+	}
+
+	public Formation() {
+	}
 }
