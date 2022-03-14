@@ -1,26 +1,20 @@
 package fr.ubo.spibackend.entities;
 
 import java.math.BigInteger;
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "ETUDIANT", schema = "DOSI", catalog = "")
 public class Etudiant {
-	// @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Id
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "NO_ETUDIANT", strategy = "uuid2")
 	@Column(name = "NO_ETUDIANT", nullable = false, length = 50)
 	private String noEtudiant;
 	@Basic
@@ -92,12 +86,11 @@ public class Etudiant {
 		super();
 	}
 
-	public Etudiant(String noEtudiant, String codeFormation, String anneeUniversitaire, String nom, String prenom,
+	public Etudiant( String codeFormation, String anneeUniversitaire, String nom, String prenom,
 			String sexe, LocalDate dateNaissance, String lieuNaissance, String nationalite, String telephone, String mobile,
 			String email, String adresse, String codePostal, String ville, String paysOrigine, String universiteOrigine,
 			Promotion promotionEtudiant) {
 		super();
-		this.noEtudiant = noEtudiant;
 		this.codeFormation = codeFormation;
 		this.anneeUniversitaire = anneeUniversitaire;
 		this.nom = nom;
