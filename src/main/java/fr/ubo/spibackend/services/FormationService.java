@@ -19,21 +19,15 @@ public class FormationService {
 	@Autowired
 	FormationRepository formationRepository;
 
-	public ResponseEntity<List<Formation>> getAllFormations() {
-
-		try {
+	public List<Formation> getAllFormations() throws ServiceException {
 			List<Formation> formations = new ArrayList<Formation>();
 
 			formationRepository.findAll().forEach(formations::add);
 
-			if (formations.isEmpty()) {
-				return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-			}
+			if (formations.isEmpty())
+				throw new ServiceException("Aucune Promotion dans la BD",HttpStatus.NOT_FOUND);
 
-			return new ResponseEntity<>(formations, HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+			return formations;
 	}
 
 	public ResponseEntity<List<Formation>> getByNomFormation(String nomFormation) {

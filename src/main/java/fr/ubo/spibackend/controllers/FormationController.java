@@ -24,15 +24,15 @@ public class FormationController {
 	@Autowired
 	private FormationService formationService;
 
-	@GetMapping
+	/*@GetMapping
 	public ResponseEntity<List<Formation>> getAllFormations() {
 		return formationService.getAllFormations();
 	}
 
-	@GetMapping("/{id}")
+	/*@GetMapping("/{id}")
 	public ResponseEntity<Formation> getClientById(@PathVariable("id") String id) {
 		return formationService.getFormationById(id);
-	}
+	}*/
 
 	@GetMapping("/nom/{nomFormation}")
 	public ResponseEntity<List<Formation>> getByNomFormation(@PathVariable("nomFormation") String nomFormation) {
