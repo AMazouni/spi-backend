@@ -67,11 +67,10 @@ public class FormationService {
 	}
 
 	public void deleteFormation(String id) throws ServiceException {
-		Formation formation = formationRepository.getById(id);
-		if (formation != null)
-			formationRepository.deleteById(id);
-		else
+		Optional<Formation> formation = formationRepository.findById(id);
+		if (!formation.isPresent())
 			throw new ServiceException("La formation " + id + " n'exite pas", HttpStatus.NOT_FOUND);
+		formationRepository.deleteById(id);
 
 	}
 }
