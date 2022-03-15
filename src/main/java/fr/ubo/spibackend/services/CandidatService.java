@@ -29,7 +29,7 @@ public class CandidatService {
     public Candidat saveCandidat(Candidat candidat) throws ServiceException {
       Candidat c = candidatRepo.findByEmail(candidat.getEmail());
       if(c!=null)
-          throw new ServiceException("Le candidat "+candidat.getNom()+" "+candidat.getPrenom()+" existe déja", HttpStatus.FOUND) ;
+          throw new ServiceException("Le candidat "+candidat.getNom()+" "+candidat.getPrenom()+" existe déja", HttpStatus.CONFLICT) ;
 
       if (candidat.getAdresse() != null && candidat.getAnneeUniversitaire() != null && candidat.getCodeFormation() != null &&
                   candidat.getCodePostal() != null && candidat.getEmail() != null && candidat.getCodePostal() != null && candidat.getDateNaissance() != null &&
@@ -41,7 +41,7 @@ public class CandidatService {
               return candidatRepo.save(candidat);
               }
 
-          throw new ServiceException("Informations manquantes pour l'enregistrement du candidat", HttpStatus.BAD_REQUEST);
+          throw new ServiceException("Merci de remplir les champs obligatoires", HttpStatus.BAD_REQUEST);
       }
 
 

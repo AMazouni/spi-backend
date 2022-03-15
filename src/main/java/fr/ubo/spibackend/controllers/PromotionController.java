@@ -5,6 +5,8 @@ import fr.ubo.spibackend.entities.Promotion;
 import fr.ubo.spibackend.exception.RestErrorMessage;
 import fr.ubo.spibackend.exception.ServiceException;
 import fr.ubo.spibackend.services.PromotionService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -56,6 +58,7 @@ public class PromotionController {
     }
 
     @PostMapping("/")
+
     public ResponseEntity save(@RequestBody Promotion e) throws ServiceException {
 
         try {

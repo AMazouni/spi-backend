@@ -16,11 +16,11 @@ public class ViewsController {
 
     @Autowired
     ViewsRepository vr;
-     @GetMapping("universite")
+        @GetMapping("universite")
     public ArrayList<DomaineViews> findAllUniversite() {
         return vr.findAllUniversite();
     }
-@GetMapping("typeens")
+        @GetMapping("typeens")
     public ArrayList<DomaineViews> findAllTypeEnseignant() {
         return vr.findAllTypeEnseignant();
     }

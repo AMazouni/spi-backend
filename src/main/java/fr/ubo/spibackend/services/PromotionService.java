@@ -77,35 +77,23 @@ public class PromotionService {
 
     public Promotion save(Promotion e) throws ServiceException {
         if(e.getCodeFormation()==null | e.getAnneeUniversitaire()==null)
-            throw new ServiceException("Le code de formation et/ou l'année universitaire sont null",HttpStatus.BAD_REQUEST);
+            throw new ServiceException("Le code de formation et l'année universitaire sont obligatoires",HttpStatus.BAD_REQUEST);
         if(e.getNbMaxEtudiant()<=0)
-            throw new ServiceException("Le nb Max d'étudiant doit être spécifié ",HttpStatus.BAD_REQUEST);
+            throw new ServiceException("Le Nombre Max d'étudiants doit être positif.",HttpStatus.PRECONDITION_FAILED);
         PromotionPK pk = new PromotionPK(e.getCodeFormation(),e.getAnneeUniversitaire());
         Optional<Promotion> result= promoRepo.findById(pk);
         if(result.isPresent()){
-            throw new ServiceException("Une promo similaire existe déjà dans la base de donnée (Année + Formation) ",HttpStatus.BAD_REQUEST);
+            throw new ServiceException("Cette promotion existe déjà",HttpStatus.CONFLICT);
         }
         if(e.getDateRentree()==null | e.getDateReponseLp()==null | e.getDateReponseLalp()==null)
-            throw new ServiceException("La promotion doit inclure les dates de Réponse LP,de réponse LA et de la rentrée",HttpStatus.BAD_REQUEST);
+            throw new ServiceException("Merci de remplir les champs obligatoires ",HttpStatus.BAD_REQUEST);
         if(!(e.getDateReponseLp().before(e.getDateReponseLalp()) & e.getDateReponseLalp().before(e.getDateRentree())))
-            throw new ServiceException("Les dates ne respectent pas les contraintes imposées (Date Liste Principale < Date Liste Attente < Date Rentrére ",HttpStatus.BAD_REQUEST);
+            throw new ServiceException("Les dates ne respectent pas les contraintes imposées",HttpStatus.PRECONDITION_FAILED);
 
         //TODO : processus stage
-        try{
             e.setFormationByCodeFormation(formaServ.getFormationById(e.getCodeFormation()));
-            List<Candidat> populatedCandidats = new ArrayList<>();
-//            for (Candidat c : e.getCandidats()){
-//                populatedCandidats.add(candServ.getCandidatByNoCandidat(c.getNoCandidat()));
-//            }
-            e.setCandidats(populatedCandidats);
         if(e.getNoEnseignant()!=null)
             e.setEnseignantByNoEnseignant(enDao.findById(e.getNoEnseignant()).get());
-            e.setEtudiants(new ArrayList<Etudiant>());
-        }catch (ServiceException ex){
-            throw new ServiceException("save Promotion exception : "+ex.getErrorMeassage(),ex.getHttpStatus());
-        }catch (NoSuchElementException ex){
-            throw new ServiceException("save Promotion exception : No such Element Enseignant"+ex.getMessage(),HttpStatus.BAD_REQUEST);
-        }
 
         return promoRepo.save(e);
     }
@@ -126,28 +114,24 @@ public class PromotionService {
             if(c.getConfirmationCandidat().equalsIgnoreCase("O"))
                 candidatsOui.add(c);
 
-        try {
             //Trie des candidats de la liste principale ayant dit oui
             //TODO: s'assurer que les Selection_ORDRE ne soit pas null dans la base de données
-            List<Candidat> sortedCandidats = candidatsOui.stream()
+            //candidatsOui.stream().filter(e->e.getSelectionNoOrdre()!=null)
+        List<Candidat> sortedCandidats = candidatsOui.stream()
                     .sorted(Comparator.comparing(Candidat::getSelectionNoOrdre))
                     .collect(Collectors.toList());
 
             //Liste de candidats à migrer
-            List<Candidat> aMigrer = new ArrayList<>();
+        List<Candidat> aMigrer = new ArrayList<>();
             int nbEtudiantRestants = promo.getNbMaxEtudiant() - promo.getEtudiants().size();
             for (int i = 0; i < nbEtudiantRestants & i < sortedCandidats.size(); i++)
                 aMigrer.add(sortedCandidats.get(i));
+        List<Etudiant> etudiants = etuServ.createEtudiant(aMigrer);
 
-            List<Etudiant> etudiants = etuServ.createEtudiant(aMigrer);
-
-            for (Candidat can : aMigrer) {
+        for (Candidat can : aMigrer) {
                 candServ.deleteCandidatByNocandidat(can.getNoCandidat());
-            }
         }
-         catch(ServiceException ex){
-                throw new ServiceException("Cannot sort candidat due to null Selection_Ordre : "+ex.getErrorMeassage(),ex.getHttpStatus());
-            }
+
         promo = this.findById(annee,code);
 
 

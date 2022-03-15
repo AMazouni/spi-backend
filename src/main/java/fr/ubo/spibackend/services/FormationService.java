@@ -36,7 +36,7 @@ public class FormationService {
 		formationRepository.findByCodeFormationLikeOrNomFormationLike(input, input).forEach(formations::add);
 
 		if (formations.isEmpty())
-			throw new ServiceException("Acune formations avec le nom " + input, HttpStatus.BAD_REQUEST);
+			throw new ServiceException("Acune formation existe " + input, HttpStatus.NOT_FOUND);
 
 		return formations;
 
