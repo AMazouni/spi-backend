@@ -36,7 +36,7 @@ public class FormationService {
 		formationRepository.findByCodeFormationLikeOrNomFormationLike(input, input).forEach(formations::add);
 
 		if (formations.isEmpty())
-			throw new ServiceException("Acune formation existe " + input, HttpStatus.NOT_FOUND);
+			throw new ServiceException("Aucune formation existe " + input, HttpStatus.NOT_FOUND);
 
 		return formations;
 
@@ -71,7 +71,7 @@ public class FormationService {
 		if (formation != null)
 			formationRepository.deleteById(id);
 		else
-			throw new ServiceException("La formation " + id + " n'exite pas", HttpStatus.BAD_REQUEST);
+			throw new ServiceException("La formation " + id + " n'exite pas", HttpStatus.NOT_FOUND);
 
 	}
 }
