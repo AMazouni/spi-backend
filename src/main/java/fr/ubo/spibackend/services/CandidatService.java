@@ -29,7 +29,7 @@ public class CandidatService {
     public Candidat saveCandidat(Candidat candidat) throws ServiceException {
       Candidat c = candidatRepo.findByEmail(candidat.getEmail());
       if(c!=null)
-          throw new ServiceException("Le candidat "+candidat.getNoCandidat()+" existe déja", HttpStatus.FOUND) ;
+          throw new ServiceException("Le candidat "+candidat.getNom()+" "+candidat.getPrenom()+" existe déja", HttpStatus.FOUND) ;
 
       if (candidat.getAdresse() != null && candidat.getAnneeUniversitaire() != null && candidat.getCodeFormation() != null &&
                   candidat.getCodePostal() != null && candidat.getEmail() != null && candidat.getCodePostal() != null && candidat.getDateNaissance() != null &&
