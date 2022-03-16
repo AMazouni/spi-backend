@@ -88,7 +88,7 @@ public class PromotionService {
         if(e.getDateRentree()==null | e.getDateReponseLp()==null | e.getDateReponseLalp()==null)
             throw new ServiceException("Merci de remplir les champs obligatoires ",HttpStatus.BAD_REQUEST);
         if(!(e.getDateReponseLp().before(e.getDateReponseLalp()) & e.getDateReponseLalp().before(e.getDateRentree())))
-            throw new ServiceException("Les dates ne respectent pas les contraintes imposées",HttpStatus.PRECONDITION_FAILED);
+            throw new ServiceException("Les dates fournies ne sont pas cohérentes.",HttpStatus.PRECONDITION_FAILED);
 
         //TODO : processus stage
             e.setFormationByCodeFormation(formaServ.getFormationById(e.getCodeFormation()));
@@ -118,7 +118,7 @@ public class PromotionService {
             //TODO: s'assurer que les Selection_ORDRE ne soit pas null dans la base de données
             //candidatsOui.stream().filter(e->e.getSelectionNoOrdre()!=null)
         List<Candidat> sortedCandidats = candidatsOui.stream()
-                    .sorted(Comparator.comparing(Candidat::getSelectionNoOrdre))
+                    .sorted(SortEntites::compareCandidats)
                     .collect(Collectors.toList());
 
             //Liste de candidats à migrer

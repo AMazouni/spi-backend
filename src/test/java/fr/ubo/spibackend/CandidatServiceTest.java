@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import fr.ubo.spibackend.services.PromotionService;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -22,6 +24,9 @@ public class CandidatServiceTest {
 
 	@InjectMocks 
 	CandidatService candidatService;
+
+	@InjectMocks
+	PromotionService promotionService;
 
 	@Mock
 	CandidatRepository mockRepository;
@@ -42,7 +47,7 @@ public class CandidatServiceTest {
 				() -> candidatService.saveCandidat(candidat),
 				"Expected save() to throw, but it didn't"
 				);
-		assertTrue(thrown.getErrorMeassage().equals("Un candidat dont le mail est "+candidat.getEmail()+" existe déja"));
+		assertTrue(thrown.getErrorMeassage().equals("Merci de remplir les champs obligatoires"));
 
 	}
 

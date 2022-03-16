@@ -7,10 +7,13 @@ import org.springframework.stereotype.Repository;
 
 import fr.ubo.spibackend.entities.Candidat;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Repository
 @RepositoryRestResource(path = "candidat")
 public interface CandidatRepository extends JpaRepository<Candidat, String> {
 Candidat findByEmail(String email);
+
+    Candidat findBySelectionNoOrdre(BigInteger selectionNoOrdre);
 }

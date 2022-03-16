@@ -27,17 +27,23 @@ public class CandidatService {
     PromotionService promotionService;
 
     public Candidat saveCandidat(Candidat candidat) throws ServiceException {
-      Candidat c = candidatRepo.findByEmail(candidat.getEmail());
-      if(c!=null)
-          throw new ServiceException("Un candidat dont le mail est "+candidat.getEmail()+" existe déja", HttpStatus.CONFLICT) ;
+
 
       if (candidat.getAdresse() != null && candidat.getAnneeUniversitaire() != null && candidat.getCodeFormation() != null &&
                   candidat.getCodePostal() != null && candidat.getEmail() != null && candidat.getCodePostal() != null && candidat.getDateNaissance() != null &&
                   candidat.getLieuNaissance() != null && candidat.getNationalite() != null && candidat.getNom() != null && candidat.getPaysOrigine() != null &&
-                  candidat.getPrenom() != null && candidat.getSexe() != null && candidat.getUniversiteOrigine() != null && candidat.getVille() != null)
+                  candidat.getPrenom() != null && candidat.getSexe() != null && candidat.getUniversiteOrigine() != null && candidat.getVille() != null &&
+                  candidat.getSelectionNoOrdre()!=null)
                {
-                   Promotion p = promotionService.findById(candidat.getAnneeUniversitaire(), candidat.getCodeFormation());
-              candidat.setPromotion(p);
+                   Promotion p = promotionService.findById(candidat.getAnneeUniversitaire(),candidat.getCodeFormation());
+                   List<Candidat> cs = p.getCandidats();
+
+                   if(cs.stream().anyMatch(c -> c.getEmail().equals(candidat.getEmail())))
+                       throw new ServiceException("Un candidat dont le mail est "+candidat.getEmail()+" existe déja", HttpStatus.CONFLICT) ;
+                   if(cs.stream().anyMatch(c -> c.getSelectionNoOrdre().equals(candidat.getSelectionNoOrdre())))
+                       throw new ServiceException("Un candidat ayant le N° d'ordre"+ candidat.getSelectionNoOrdre() +"existe déjà", HttpStatus.CONFLICT) ;
+
+                   candidat.setPromotion(p);
               return candidatRepo.save(candidat);
               }
 
@@ -48,10 +54,7 @@ public class CandidatService {
     public List<Candidat> getAllCandidat() throws ServiceException {
       //  List<Candidat> candidats= candidatRepo.findAll().stream().sorted(Comparator.comparing(Candidat::getSelectionNoOrdre)).collect(Collectors.toList());
         List<Candidat> candidats= candidatRepo.findAll();
-        for(Candidat c : candidats) {
-            Promotion p = promotionService.findById(c.getAnneeUniversitaire(), c.getCodeFormation());
-            c.setPromotion(p);
-        }
+
         if(candidats.size()==0)
             throw new ServiceException("Pas de candidats trouvée",HttpStatus.NOT_FOUND);
         return candidats;
