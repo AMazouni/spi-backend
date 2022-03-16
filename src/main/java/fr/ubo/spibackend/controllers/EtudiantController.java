@@ -31,4 +31,16 @@ public class EtudiantController {
         }
     }
 
+    @GetMapping("")
+    public ResponseEntity<List<Etudiant>> findAllEtudiants() {
+        try {
+            return new ResponseEntity(etudiantSerice.getAllEtudiant(), HttpStatus.OK);
+        }catch (ServiceException e){
+            return new ResponseEntity(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+        }
+        catch (Exception  e) {
+            return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 }

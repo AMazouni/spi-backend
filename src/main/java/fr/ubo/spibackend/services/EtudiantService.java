@@ -42,4 +42,11 @@ public class EtudiantService {
 
     }
 
+    public List<Etudiant> getAllEtudiant() throws ServiceException {
+        List<Etudiant> etudiants= etudiantRepository.findAll();
+        if(etudiants.size()==0)
+            throw new ServiceException("Pas d'etudiants trouvée",HttpStatus.NOT_FOUND);
+        return etudiants;
+    }
+
 }
