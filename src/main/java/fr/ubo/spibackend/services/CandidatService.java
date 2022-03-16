@@ -29,7 +29,7 @@ public class CandidatService {
     public Candidat saveCandidat(Candidat candidat) throws ServiceException {
       Candidat c = candidatRepo.findByEmail(candidat.getEmail());
       if(c!=null)
-          throw new ServiceException("Le candidat "+candidat.getNom()+" "+candidat.getPrenom()+" existe déja", HttpStatus.CONFLICT) ;
+          throw new ServiceException("L email "+candidat.getEmail()+" est déja utilisé par un autre candidat", HttpStatus.CONFLICT) ;
 
       if (candidat.getAdresse() != null && candidat.getAnneeUniversitaire() != null && candidat.getCodeFormation() != null &&
                   candidat.getCodePostal() != null && candidat.getEmail() != null && candidat.getCodePostal() != null && candidat.getDateNaissance() != null &&
@@ -48,10 +48,6 @@ public class CandidatService {
     public List<Candidat> getAllCandidat() throws ServiceException {
       //  List<Candidat> candidats= candidatRepo.findAll().stream().sorted(Comparator.comparing(Candidat::getSelectionNoOrdre)).collect(Collectors.toList());
         List<Candidat> candidats= candidatRepo.findAll();
-        for(Candidat c : candidats) {
-            Promotion p = promotionService.findById(c.getAnneeUniversitaire(), c.getCodeFormation());
-            c.setPromotion(p);
-        }
         if(candidats.size()==0)
             throw new ServiceException("Pas de candidats trouvée",HttpStatus.NOT_FOUND);
         return candidats;
