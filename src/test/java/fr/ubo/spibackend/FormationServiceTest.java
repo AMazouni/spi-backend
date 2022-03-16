@@ -83,7 +83,7 @@ public class FormationServiceTest {
 	@Test
 	public void deleteFormation() throws ServiceException {
 		Formation formation= this.initFormation();
-		Mockito.when(mockRepository.getById("1223M")).thenReturn(formation);
+		Mockito.when(mockRepository.findById("1223M")).thenReturn(Optional.of(formation));
 		 
 		formationService.deleteFormation("1223M");
 		Mockito.verify(mockRepository).deleteById("1223M");
