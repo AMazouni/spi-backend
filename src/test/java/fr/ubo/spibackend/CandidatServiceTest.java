@@ -42,7 +42,7 @@ public class CandidatServiceTest {
 				() -> candidatService.saveCandidat(candidat),
 				"Expected save() to throw, but it didn't"
 				);
-		assertTrue(thrown.getErrorMeassage().equals("Le candidat "+candidat.getNoCandidat()+" existe déja"));
+		assertTrue(thrown.getErrorMeassage().equals("Un candidat dont le mail est "+candidat.getEmail()+" existe déja"));
 
 	}
 
