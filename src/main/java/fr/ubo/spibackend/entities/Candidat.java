@@ -218,6 +218,34 @@ public class Candidat{
         this.nationalite = nationalite;
     }
 
+    @Override
+    public String toString() {
+        return "Candidat{" +
+                "noCandidat='" + noCandidat + '\'' +
+                ", codeFormation='" + codeFormation + '\'' +
+                ", anneeUniversitaire='" + anneeUniversitaire + '\'' +
+                ", nom='" + nom + '\'' +
+                ", prenom='" + prenom + '\'' +
+                ", sexe='" + sexe + '\'' +
+                ", dateNaissance=" + dateNaissance +
+                ", lieuNaissance='" + lieuNaissance + '\'' +
+                ", nationalite='" + nationalite + '\'' +
+                ", telephone='" + telephone + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", email='" + email + '\'' +
+                ", adresse='" + adresse + '\'' +
+                ", codePostal='" + codePostal + '\'' +
+                ", ville='" + ville + '\'' +
+                ", paysOrigine='" + paysOrigine + '\'' +
+                ", universiteOrigine='" + universiteOrigine + '\'' +
+                ", listeSelection='" + listeSelection + '\'' +
+                ", selectionNoOrdre=" + selectionNoOrdre +
+                ", confirmationCandidat='" + confirmationCandidat + '\'' +
+                ", dateReponseCandidat=" + dateReponseCandidat +
+                ", promotion=" + promotion +
+                '}';
+    }
+
     public String getTelephone() {
         return telephone;
     }
