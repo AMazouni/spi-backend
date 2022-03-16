@@ -107,7 +107,7 @@ public class PromotionServiceTest {
 	            () -> promotionService.save(promotion),
 	            "Expected save() to throw, but it didn't"
 	     );
-		assertTrue(thrown.getErrorMeassage().equals("Le nb Max d'étudiant doit être spécifié "));
+		assertTrue(thrown.getErrorMeassage().equals("Le Nombre Max d'étudiants doit être positif."));
 		
 	}
 	
