@@ -3,8 +3,6 @@ package fr.ubo.spibackend;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,7 +29,7 @@ import fr.ubo.spibackend.services.PromotionService;
 //@MockitoSettings(strictness = Strictness.LENIENT)
 //@RunWith(MockitoJUnitRunner.class)
 
-public class PromotionTests {
+public class PromotionServiceTest {
 	
 	 @InjectMocks 
 	 PromotionService promotionService;
@@ -100,7 +98,6 @@ public class PromotionTests {
 	
 	@Test
 	public void savePromotion() throws ServiceException {
-		ServiceException s= new ServiceException();
 		Promotion promotion = this.getPromo();
 		PromotionPK pk= new PromotionPK(promotion.getCodeFormation(),promotion.getAnneeUniversitaire());
 		Mockito.when(mockRepository.findById(pk)).thenReturn(Optional.of(promotion));
