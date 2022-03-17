@@ -8,8 +8,8 @@ public class SortEntites {
 
     public static int compareCandidats(Candidat a, Candidat b){
 
-        Integer x1 = selectionListComparator(a.getListeSelection());
-        Integer x2 = selectionListComparator(b.getListeSelection());
+        Integer x1 = selectionListComparator(a.getListeSelection()==null? "" :a.getListeSelection());
+        Integer x2 = selectionListComparator(b.getListeSelection()==null? "" :b.getListeSelection());
         int sComp = x1.compareTo(x2);
 
         if (sComp != 0) {
