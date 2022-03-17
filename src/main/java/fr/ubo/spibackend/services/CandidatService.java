@@ -32,8 +32,7 @@ public class CandidatService {
       if (candidat.getAdresse() != null && candidat.getAnneeUniversitaire() != null && candidat.getCodeFormation() != null &&
                   candidat.getCodePostal() != null && candidat.getEmail() != null && candidat.getCodePostal() != null && candidat.getDateNaissance() != null &&
                   candidat.getLieuNaissance() != null && candidat.getNationalite() != null && candidat.getNom() != null && candidat.getPaysOrigine() != null &&
-                  candidat.getPrenom() != null && candidat.getSexe() != null && candidat.getUniversiteOrigine() != null && candidat.getVille() != null &&
-                  candidat.getSelectionNoOrdre()!=null)
+                  candidat.getPrenom() != null && candidat.getSexe() != null && candidat.getUniversiteOrigine() != null && candidat.getVille() != null)
                {
                    Promotion p = promotionService.findById(candidat.getAnneeUniversitaire(),candidat.getCodeFormation());
                    List<Candidat> cs = p.getCandidats();

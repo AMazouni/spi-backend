@@ -106,6 +106,7 @@ public class PromotionService {
     public Promotion accepterCandidats(String annee, String code) throws ServiceException {
         Promotion promo = this.findById(annee,code);
         List<Candidat>  cand = promo.getCandidats();
+        int nbEtudiantRestants = promo.getNbMaxEtudiant() - promo.getEtudiants().size();
         //Candidat de la liste principale
         List<Candidat> candidatsLp = new ArrayList<>();
         for(Candidat c : cand)
@@ -124,34 +125,61 @@ public class PromotionService {
             //Trie des candidats de la liste principale ayant dit oui
             //TODO: s'assurer que les Selection_ORDRE ne soit pas null dans la base de données
             //candidatsOui.stream().filter(e->e.getSelectionNoOrdre()!=null)
-        List<Candidat> sortedCandidats;
-      try {
-      sortedCandidats = candidatsOui.stream()
-                  .sorted(Comparator.comparing(Candidat::getSelectionNoOrdre))
-                  .collect(Collectors.toList());
-      }catch (Exception e){
-
-              throw new ServiceException("Impossible de trier les candidats en LP par ordre de sélection ",HttpStatus.CONFLICT);
-
-      }
 
 
-        //Liste de candidats à migrer
-        List<Candidat> aMigrer = new ArrayList<>();
-            int nbEtudiantRestants = promo.getNbMaxEtudiant() - promo.getEtudiants().size();
-        if(nbEtudiantRestants<=0)
-            throw new ServiceException("Le numéro d'étudiant maxila est atteint",HttpStatus.NOT_FOUND);
-        for (int i = 0; i < nbEtudiantRestants & i < sortedCandidats.size(); i++)
-                aMigrer.add(sortedCandidats.get(i));
-        if(aMigrer.size()==0)
-            throw new ServiceException("Aucun candidats ne peut être accepté",HttpStatus.NOT_FOUND);
-        List<Etudiant> etudiants = etuServ.createEtudiant(aMigrer);
+        //candidats sur la liste principale ayant un numéro d'ordre de selection non null
+        if(candidatsOui.size()<=nbEtudiantRestants) {
 
-        for (Candidat can : aMigrer) {
+
+            //Liste de candidats à migrer
+            List<Candidat> aMigrer = new ArrayList<>();
+            for (int i = 0; i< candidatsOui.size(); i++)
+                aMigrer.add(candidatsOui.get(i));
+
+            if (aMigrer.size() == 0)
+                throw new ServiceException("Aucun candidats ne peut être accepté", HttpStatus.NOT_FOUND);
+            List<Etudiant> etudiants = etuServ.createEtudiant(aMigrer);
+
+            for (Candidat can : aMigrer) {
                 candServ.deleteCandidatByNocandidat(can.getNoCandidat());
 
+            }
         }
+        else{
+            for (Candidat c : candidatsOui)
+                if (c.getSelectionNoOrdre() == null)
+                    throw new ServiceException("Tous les candidats ayant dit oui doivent avoir un ordre de sélection car le nombre de place est insuffisant", HttpStatus.CONFLICT);
+            else{
+                    List<Candidat> sortedCandidats = new ArrayList<>();
+                    try {
+                        sortedCandidats = candidatsOui.stream()
+                                .sorted(Comparator.comparing(Candidat::getSelectionNoOrdre))
+                                .collect(Collectors.toList());
+                    } catch (Exception e) {
 
+                        throw new ServiceException("Impossible de trier les candidats en LP par ordre de sélection ", HttpStatus.CONFLICT);
+
+                    }
+
+
+                    //Liste de candidats à migrer
+                    List<Candidat> aMigrer = new ArrayList<>();
+
+                    if (nbEtudiantRestants <= 0)
+                        throw new ServiceException("Le nombre maximal d'etutiant pour cette formation est atteint", HttpStatus.NOT_FOUND);
+                    for (int i = 0; i < nbEtudiantRestants & i < sortedCandidats.size(); i++)
+                        aMigrer.add(sortedCandidats.get(i));
+
+                    if (aMigrer.size() == 0)
+                        throw new ServiceException("Aucun candidats ne peut être accepté", HttpStatus.NOT_FOUND);
+                    List<Etudiant> etudiants = etuServ.createEtudiant(aMigrer);
+
+                    for (Candidat can : aMigrer) {
+                        candServ.deleteCandidatByNocandidat(can.getNoCandidat());
+
+                    }
+                }
+        }
         em.detach(promo);
         Promotion p = promoRepo.findById(new PromotionPK(code,annee)).get();
 
