@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,6 +35,8 @@ public class PromotionService {
     FormationService formServ;
     @Autowired
     EtudiantService etuServ;
+    @Autowired
+    EntityManager em;
 
 
 
@@ -83,6 +86,7 @@ public class PromotionService {
         PromotionPK pk = new PromotionPK(e.getCodeFormation(),e.getAnneeUniversitaire());
         Optional<Promotion> result= promoRepo.findById(pk);
         if(result.isPresent()){
+            System.out.println(result.get().toString());
             throw new ServiceException("Cette promotion existe déjà",HttpStatus.CONFLICT);
         }
         if(e.getDateRentree()==null | e.getDateReponseLp()==null | e.getDateReponseLalp()==null)
@@ -107,35 +111,52 @@ public class PromotionService {
         for(Candidat c : cand)
             if(c.getListeSelection().equalsIgnoreCase("LP"))
                 candidatsLp.add(c);
-
+        if(candidatsLp.size()==0)
+            throw new ServiceException("Il n'y a aucun candidat dans la liste principale de cette promotion "+promo.getSiglePromotion(),HttpStatus.NOT_FOUND);
         //Candidat ayant Confirmation_Candidat=oui
         List<Candidat> candidatsOui = new ArrayList<>();
         for(Candidat c : candidatsLp)
             if(c.getConfirmationCandidat().equalsIgnoreCase("O"))
                 candidatsOui.add(c);
+        if(candidatsOui.size()==0)
+            throw new ServiceException("Aucun candidat n'as confirmé sa candidature cette promotion "+promo.getSiglePromotion(),HttpStatus.NOT_FOUND);
 
             //Trie des candidats de la liste principale ayant dit oui
             //TODO: s'assurer que les Selection_ORDRE ne soit pas null dans la base de données
             //candidatsOui.stream().filter(e->e.getSelectionNoOrdre()!=null)
-        List<Candidat> sortedCandidats = candidatsOui.stream()
-                    .sorted(SortEntites::compareCandidats)
-                    .collect(Collectors.toList());
+        List<Candidat> sortedCandidats;
+      try {
+      sortedCandidats = candidatsOui.stream()
+                  .sorted(Comparator.comparing(Candidat::getSelectionNoOrdre))
+                  .collect(Collectors.toList());
+      }catch (Exception e){
 
-            //Liste de candidats à migrer
+              throw new ServiceException("Impossible de trier les candidats en LP par ordre de sélection ",HttpStatus.CONFLICT);
+
+      }
+
+
+        //Liste de candidats à migrer
         List<Candidat> aMigrer = new ArrayList<>();
             int nbEtudiantRestants = promo.getNbMaxEtudiant() - promo.getEtudiants().size();
-            for (int i = 0; i < nbEtudiantRestants & i < sortedCandidats.size(); i++)
+        if(nbEtudiantRestants<=0)
+            throw new ServiceException("Le numéro d'étudiant maxila est atteint",HttpStatus.NOT_FOUND);
+        for (int i = 0; i < nbEtudiantRestants & i < sortedCandidats.size(); i++)
                 aMigrer.add(sortedCandidats.get(i));
+        if(aMigrer.size()==0)
+            throw new ServiceException("Aucun candidats ne peut être accepté",HttpStatus.NOT_FOUND);
         List<Etudiant> etudiants = etuServ.createEtudiant(aMigrer);
 
         for (Candidat can : aMigrer) {
                 candServ.deleteCandidatByNocandidat(can.getNoCandidat());
+
         }
 
-        promo = this.findById(annee,code);
+        em.detach(promo);
+        Promotion p = promoRepo.findById(new PromotionPK(code,annee)).get();
 
 
-        return promo;
+        return p;
     }
 
 

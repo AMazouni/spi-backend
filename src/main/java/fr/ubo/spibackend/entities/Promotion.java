@@ -187,4 +187,25 @@ public class Promotion implements Serializable {
     public void setEnseignantByNoEnseignant(Enseignant enseignantByNoEnseignant) {
         this.enseignantByNoEnseignant = enseignantByNoEnseignant;
     }
+
+    @Override
+    public String toString() {
+        return "Promotion{" +
+                "codeFormation='" + codeFormation + '\'' +
+                ", anneeUniversitaire='" + anneeUniversitaire + '\'' +
+                ", noEnseignant=" + noEnseignant +
+                ", siglePromotion='" + siglePromotion + '\'' +
+                ", nbMaxEtudiant=" + nbMaxEtudiant +
+                ", dateReponseLp=" + dateReponseLp +
+                ", dateReponseLalp=" + dateReponseLalp +
+                ", dateRentree=" + dateRentree +
+                ", lieuRentree='" + lieuRentree + '\'' +
+                ", processusStage='" + processusStage + '\'' +
+                ", commentaire='" + commentaire + '\'' +
+                ", candidats=" + candidats +
+                ", etudiants=" + etudiants +
+                ", formationByCodeFormation=" + formationByCodeFormation +
+                ", enseignantByNoEnseignant=" + enseignantByNoEnseignant +
+                '}';
+    }
 }
