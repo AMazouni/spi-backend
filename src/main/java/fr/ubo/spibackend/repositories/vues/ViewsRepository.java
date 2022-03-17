@@ -53,5 +53,9 @@ public ArrayList<DomaineViews> findAllDiplome(){
     return res;
 }
 
+    public ArrayList<DomaineViews> findAllSalle(){
+        ArrayList<DomaineViews> res = (ArrayList<DomaineViews>) em.createNativeQuery("Select * from DOSI.V_SALLE", DomaineViews.class).getResultList();
+        return res;
+    }
 
 }

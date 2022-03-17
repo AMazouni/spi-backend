@@ -56,4 +56,8 @@ public class ViewsController {
     public ArrayList<DomaineViews> findAllDiplome() {
         return vr.findAllDiplome();
     }
+    @GetMapping("diplome")
+    public ArrayList<DomaineViews> findAllSalle() {
+        return vr.findAllSalle();
+    }
 }
