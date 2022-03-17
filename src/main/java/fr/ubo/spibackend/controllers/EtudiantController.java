@@ -26,8 +26,8 @@ public class EtudiantController {
             return new ResponseEntity<List<Etudiant>>(etudiantSerice.createEtudiant(candidats), HttpStatus.OK);
         }catch(ServiceException e){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
-        }catch (Exception e ){
-            return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e ){ e.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -38,8 +38,8 @@ public class EtudiantController {
         }catch (ServiceException e){
             return new ResponseEntity(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
         }
-        catch (Exception  e) {
-            return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        catch (Exception  e) { e.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

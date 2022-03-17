@@ -29,8 +29,8 @@ public class PromotionController {
             return new ResponseEntity(promoServ.findAll(), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getMessage()), e.getHttpStatus());
-        }catch (Exception e ){
-            return new ResponseEntity(new RestErrorMessage(e.toString()+" Backend error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e ){ e.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -40,8 +40,8 @@ public class PromotionController {
             return new ResponseEntity<Promotion>(promoServ.findById(annee, code), HttpStatus.OK);
         }catch(ServiceException e){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
-        }catch (Exception e ){
-            return new ResponseEntity(new RestErrorMessage(e.toString()+" Backend error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e ){ e.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -52,9 +52,8 @@ public class PromotionController {
             return new ResponseEntity<ArrayList<Promotion>>(promoServ.findByCodeFormation(code), HttpStatus.OK);
         }catch(ServiceException e){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
-        }catch (Exception e ){
-            e.printStackTrace();
-            return new ResponseEntity(new RestErrorMessage(e.toString()+" Backend error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e ){ e.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -66,8 +65,8 @@ public class PromotionController {
             return new ResponseEntity( promoServ.save(e), HttpStatus.OK);
         }catch(ServiceException ex){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(ex.getErrorMeassage()), ex.getHttpStatus());
-        }catch (Exception ex ){
-            return new ResponseEntity(new RestErrorMessage(ex.getMessage()+" Backend error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception ex){ ex.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -79,8 +78,8 @@ public class PromotionController {
             return new ResponseEntity(promoServ.accepterCandidats(annee, code), HttpStatus.OK);
         }catch(ServiceException e){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
-        }catch (Exception e ){
-            return new ResponseEntity(new RestErrorMessage(e.getMessage()+" :  Backend error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e ){ e.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

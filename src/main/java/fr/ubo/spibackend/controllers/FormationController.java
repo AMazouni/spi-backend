@@ -26,8 +26,8 @@ public class FormationController {
 			return new ResponseEntity<List<Formation>>(formationService.getAllFormations(), HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
-		} catch (Exception e) {
-			return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		}catch (Exception e ){ e.printStackTrace();
+			return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -37,8 +37,8 @@ public class FormationController {
 			return new ResponseEntity<Formation>(formationService.getFormationById(id), HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
-		} catch (Exception e) {
-			return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		}catch (Exception e ){ e.printStackTrace();
+			return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -48,8 +48,8 @@ public class FormationController {
 			return new ResponseEntity<List<Formation>>(formationService.searchByCodeOrNom(input), HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
-		} catch (Exception e) {
-			return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (Exception e ){ e.printStackTrace();
+			return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -59,8 +59,8 @@ public class FormationController {
 			return new ResponseEntity<Formation>(formationService.createFormation(formation), HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
-		} catch (Exception e) {
-			return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (Exception e ){ e.printStackTrace();
+			return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
@@ -71,8 +71,8 @@ public class FormationController {
 			return new ResponseEntity(null, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
-		} catch (Exception e) {
-			return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+		} catch (Exception e ){ e.printStackTrace();
+			return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 }

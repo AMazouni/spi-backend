@@ -29,8 +29,8 @@ public class CandidatController {
         }catch (ServiceException e){
             return new ResponseEntity(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
         }
-        catch (Exception  e) {
-            return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        catch (Exception e ){ e.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -41,8 +41,8 @@ public class CandidatController {
             return new ResponseEntity<Candidat>(candidatServices.saveCandidat(candidat), HttpStatus.OK);
         }catch(ServiceException e){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
-        }catch (Exception e ){
-            return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e ){ e.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -53,8 +53,8 @@ public class CandidatController {
             return new ResponseEntity<Candidat>(candidatServices.updateCandidat(candidat), HttpStatus.OK);
         }catch(ServiceException e){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
-        }catch (Exception e ){
-            return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e ){ e.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -66,8 +66,8 @@ public class CandidatController {
             return new ResponseEntity(null, HttpStatus.OK);
         }catch(ServiceException e){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
-        }catch (Exception e ){
-            return new ResponseEntity(new RestErrorMessage(e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
+        }catch (Exception e ){ e.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
