@@ -81,7 +81,7 @@ public class PromotionService {
     public Promotion save(Promotion e) throws ServiceException {
         if(e.getCodeFormation()==null | e.getAnneeUniversitaire()==null)
             throw new ServiceException("Le code de formation et l'année universitaire sont obligatoires",HttpStatus.BAD_REQUEST);
-        if(e.getNbMaxEtudiant()<=0)
+        if(e.getNbMaxEtudiant()<0 | e.getNbMaxEtudiant()>999)
             throw new ServiceException("Le Nombre Max d'étudiants doit être positif.",HttpStatus.PRECONDITION_FAILED);
         PromotionPK pk = new PromotionPK(e.getCodeFormation(),e.getAnneeUniversitaire());
         Optional<Promotion> result= promoRepo.findById(pk);

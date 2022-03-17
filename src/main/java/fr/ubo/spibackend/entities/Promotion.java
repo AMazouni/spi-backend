@@ -91,7 +91,7 @@ public class Promotion implements Serializable {
         return nbMaxEtudiant;
     }
 
-    public void setNbMaxEtudiant(byte nbMaxEtudiant) {
+    public void setNbMaxEtudiant(int nbMaxEtudiant) {
         this.nbMaxEtudiant = nbMaxEtudiant;
     }
 
