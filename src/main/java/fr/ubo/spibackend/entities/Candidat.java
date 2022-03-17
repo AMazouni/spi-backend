@@ -75,7 +75,7 @@ public class Candidat{
     private BigInteger selectionNoOrdre;
     @Basic
     @Column(name = "CONFIRMATION_CANDIDAT", nullable = true, length = 1)
-    private String confirmationCandidat;
+    private String confirmationCandidat="N";
     @Basic
     @Column(name = "DATE_REPONSE_CANDIDAT", nullable = true)
     private LocalDate dateReponseCandidat;
