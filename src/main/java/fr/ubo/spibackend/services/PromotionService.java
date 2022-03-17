@@ -117,6 +117,7 @@ public class PromotionService {
         //Candidat ayant Confirmation_Candidat=oui
         List<Candidat> candidatsOui = new ArrayList<>();
         for(Candidat c : candidatsLp)
+            if(c.getConfirmationCandidat()!=null)
             if(c.getConfirmationCandidat().equalsIgnoreCase("O"))
                 candidatsOui.add(c);
         if(candidatsOui.size()==0)
@@ -166,16 +167,19 @@ public class PromotionService {
                     List<Candidat> aMigrer = new ArrayList<>();
 
                     if (nbEtudiantRestants <= 0)
-                        throw new ServiceException("Le nombre maximal d'etutiant pour cette formation est atteint", HttpStatus.NOT_FOUND);
+                        throw new ServiceException("Le nombre maximal d'etudiant pour cette formation est atteint", HttpStatus.NOT_FOUND);
                     for (int i = 0; i < nbEtudiantRestants & i < sortedCandidats.size(); i++)
                         aMigrer.add(sortedCandidats.get(i));
 
                     if (aMigrer.size() == 0)
                         throw new ServiceException("Aucun candidats ne peut être accepté", HttpStatus.NOT_FOUND);
                     List<Etudiant> etudiants = etuServ.createEtudiant(aMigrer);
+                    promo.setEtudiants(etudiants);
 
                     for (Candidat can : aMigrer) {
                         candServ.deleteCandidatByNocandidat(can.getNoCandidat());
+                         promo.getCandidats().remove(can);
+
 
                     }
                 }
