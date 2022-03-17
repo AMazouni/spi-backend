@@ -39,8 +39,6 @@ public class CandidatService {
 
                    if(cs.stream().anyMatch(c -> c.getEmail().equals(candidat.getEmail())))
                        throw new ServiceException("Un candidat dont le mail est "+candidat.getEmail()+" existe déja", HttpStatus.CONFLICT) ;
-                   if(cs.stream().anyMatch(c -> c.getSelectionNoOrdre().equals(candidat.getSelectionNoOrdre())))
-                       throw new ServiceException("Un candidat ayant le N° d'ordre"+ candidat.getSelectionNoOrdre() +"existe déjà", HttpStatus.CONFLICT) ;
 
                    candidat.setPromotion(p);
               return candidatRepo.save(candidat);
