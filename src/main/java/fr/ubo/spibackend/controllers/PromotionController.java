@@ -1,18 +1,22 @@
 package fr.ubo.spibackend.controllers;
 
 
+import fr.ubo.spibackend.dto.PromotionDTO;
+import fr.ubo.spibackend.dto.converter.PromotionMapper;
 import fr.ubo.spibackend.entities.Promotion;
 import fr.ubo.spibackend.exception.RestErrorMessage;
 import fr.ubo.spibackend.exception.ServiceException;
 import fr.ubo.spibackend.services.PromotionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins="*")
@@ -21,6 +25,8 @@ public class PromotionController {
 
     @Autowired
     PromotionService promoServ;
+    private PromotionMapper mapper
+            = Mappers.getMapper(PromotionMapper.class);
 
     @GetMapping
     public ResponseEntity findAll(){
@@ -37,7 +43,8 @@ public class PromotionController {
     @GetMapping("/{code}/{annee}")
     public ResponseEntity findById(@PathVariable String annee, @PathVariable String code) {
         try {
-            return new ResponseEntity<Promotion>(promoServ.findById(annee, code), HttpStatus.OK);
+            PromotionDTO promo = mapper.map(promoServ.findById(annee, code));
+            return new ResponseEntity<PromotionDTO>(promo, HttpStatus.OK);
         }catch(ServiceException e){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
         }catch (Exception e ){ e.printStackTrace();

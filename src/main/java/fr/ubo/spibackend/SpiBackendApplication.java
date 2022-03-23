@@ -9,9 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 public class SpiBackendApplication {
 
-	@Autowired
-	ViewsRepository vr;
-
 	public static void main(String[] args) {
 		SpringApplication.run(SpiBackendApplication.class, args);
 
