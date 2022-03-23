@@ -114,24 +114,24 @@ public class PromotionControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
-    @Test
-    public void save_Ok() throws Exception {
-        Promotion p = promoTest();
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.findAndRegisterModules();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
-        String requestJson=ow.writeValueAsString(p);
-
-        mvc.perform( MockMvcRequestBuilders
-                        .post("/promotions/")
-                        .contentType(APPLICATION_JSON_UTF8)
-                        .accept(APPLICATION_JSON_UTF8)
-                        .content(requestJson))
-                .andExpect(status().isOk());
-      p = promoSer.findById(this.anneeUniv,this.codeFormation);
-        promoRep.delete(p);
-    }
+//    @Test
+//    public void save_Ok() throws Exception {
+//        Promotion p = promoTest();
+//        ObjectMapper mapper = new ObjectMapper();
+//        mapper.findAndRegisterModules();
+//        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
+//        ObjectWriter ow = mapper.writer().withDefaultPrettyPrinter();
+//        String requestJson=ow.writeValueAsString(p);
+//
+//        mvc.perform( MockMvcRequestBuilders
+//                        .post("/promotions/")
+//                        .contentType(APPLICATION_JSON_UTF8)
+//                        .accept(APPLICATION_JSON_UTF8)
+//                        .content(requestJson))
+//                .andExpect(status().isOk());
+//      p = promoSer.findById(this.anneeUniv,this.codeFormation);
+//        promoRep.delete(p);
+//    }
 
 //
 //    public Promotion tenirCandidats(String annee, String code) throws ServiceException {
