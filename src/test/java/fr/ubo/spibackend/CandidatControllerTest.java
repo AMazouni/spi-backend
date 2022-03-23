@@ -55,7 +55,7 @@ public class CandidatControllerTest
         //return candServ.saveCandidat(candidat);
         Candidat c = candServ.getAllCandidat().get(0);
         c.setNoCandidat(null);
-        c.setSelectionNoOrdre(BigInteger.valueOf(100000000l));
+        c.setSelectionNoOrdre(Integer.valueOf(100000000));
         c.setEmail(UUID.randomUUID().toString()+"@ubo.fr");
 
         ObjectMapper mapper = new ObjectMapper();
@@ -71,7 +71,7 @@ public class CandidatControllerTest
                         .content(requestJson))
                 .andExpect(status().isOk());
 
-        candRepo.delete(candRepo.findBySelectionNoOrdre(BigInteger.valueOf(100000000l)));
+        candRepo.delete(candRepo.findBySelectionNoOrdre(Integer.valueOf(100000000)));
     }
     @Test
     public void saveCandidat_Conflict() throws Exception {

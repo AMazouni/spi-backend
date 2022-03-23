@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.math.BigInteger;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -72,7 +71,7 @@ public class Candidat{
     private String listeSelection;
     @Basic
     @Column(name = "SELECTION_NO_ORDRE", nullable = true, precision = 0)
-    private BigInteger selectionNoOrdre;
+    private Integer selectionNoOrdre;
     @Basic
     @Column(name = "CONFIRMATION_CANDIDAT", nullable = true, length = 1)
     private String confirmationCandidat;
@@ -93,7 +92,7 @@ public class Candidat{
         super();
     }
 
-    public Candidat(String noCandidat, String codeFormation, String anneeUniversitaire, String nom, String prenom, String sexe, LocalDate dateNaissance, String lieuNaissance, String nationalite, String telephone, String mobile, String email, String adresse, String codePostal, String ville, String paysOrigine, String universiteOrigine, String listeSelection, BigInteger selectionNoOrdre, String confirmationCandidat, LocalDate dateReponseCandidat, Promotion promotion) {
+    public Candidat(String noCandidat, String codeFormation, String anneeUniversitaire, String nom, String prenom, String sexe, LocalDate dateNaissance, String lieuNaissance, String nationalite, String telephone, String mobile, String email, String adresse, String codePostal, String ville, String paysOrigine, String universiteOrigine, String listeSelection, Integer selectionNoOrdre, String confirmationCandidat, LocalDate dateReponseCandidat, Promotion promotion) {
         this.noCandidat = noCandidat;
         this.codeFormation = codeFormation;
         this.anneeUniversitaire = anneeUniversitaire;
@@ -318,11 +317,11 @@ public class Candidat{
         this.listeSelection = listeSelection;
     }
 
-    public BigInteger getSelectionNoOrdre() {
+    public Integer getSelectionNoOrdre() {
         return selectionNoOrdre;
     }
 
-    public void setSelectionNoOrdre(BigInteger selectionNoOrdre) {
+    public void setSelectionNoOrdre(Integer selectionNoOrdre) {
         this.selectionNoOrdre = selectionNoOrdre;
     }
 

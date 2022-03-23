@@ -1,8 +1,10 @@
 package fr.ubo.spibackend.services;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -106,6 +108,82 @@ public class CandidatService {
 
 		}
 		return listCandidats;
+
+	}
+
+	public int LastSelectionOrdreLP(List<Candidat> candidats){
+		int max = 0;
+		for(Candidat c : candidats)
+			if(c.getSelectionNoOrdre()!=null)
+			if(c.getSelectionNoOrdre()>max)
+				max=c.getSelectionNoOrdre();
+		return max;
+	}
+
+	public Candidat getFirstCandidatLANNon(List<Candidat> candidats) throws ServiceException {
+		List<Candidat> candidatsLANNon = new ArrayList<>();
+		List<Candidat> sortedCandidats = new ArrayList<>();
+		for (Candidat c : candidats)
+			if (!c.getConfirmationCandidat().equalsIgnoreCase("N") )
+				candidatsLANNon.add(c);
+
+		for (Candidat c : candidatsLANNon)
+			if (c.getSelectionNoOrdre()!=null)
+
+				try {
+					sortedCandidats = candidatsLANNon.stream()
+							.sorted(Comparator.comparing(Candidat::getSelectionNoOrdre))
+							.collect(Collectors.toList());
+				} catch (Exception e) {
+
+					throw new ServiceException("Impossible de trier les candidats en liste d'attente par ordre de sélection ", HttpStatus.CONFLICT);
+
+				}
+				return  sortedCandidats.get(0);
+			}
+
+	public void updateConfirmationCandidat(Candidat candidat) throws ServiceException {
+
+		List<Candidat> candidats = candidat.getPromotion().getCandidats();
+		Candidat c = candidatRepo.findById(candidat.getNoCandidat()).orElse(null);
+		Candidat cr=null;
+		Candidat cr2=null;
+		if(c!=null){
+			if(candidat.getConfirmationCandidat().equalsIgnoreCase("O"))
+				c.setConfirmationCandidat("O");
+			if(candidat.getConfirmationCandidat().equalsIgnoreCase("N")){
+				c.setConfirmationCandidat("N");
+				if(candidat.getListeSelection().equalsIgnoreCase("LP")){
+					List<Candidat> candidatsLp = new ArrayList<>();
+					for(Candidat c1 : candidats)
+						if(c1.getListeSelection().equalsIgnoreCase("LP"))
+							candidatsLp.add(c1);
+					for(Candidat c2 : candidatsLp) {
+						cr = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
+						if (c2.getSelectionNoOrdre() < candidat.getSelectionNoOrdre())
+							cr.setSelectionNoOrdre(cr.getSelectionNoOrdre() + 1);
+					}
+
+					List<Candidat> candidatsLA = new ArrayList<>();
+					for(Candidat c3 : candidats)
+						if(c3.getListeSelection().equalsIgnoreCase("LA"))
+							candidatsLA.add(c3);
+
+					Candidat c4 = this.getFirstCandidatLANNon(candidatsLA);
+					Candidat cand = candidatRepo.findById(c4.getNoCandidat()).orElse(null);
+					cand.setListeSelection("LP");
+					cand.setSelectionNoOrdre(this.LastSelectionOrdreLP(candidatsLp)+1);
+
+					for(Candidat c2 : candidatsLA) {
+						cr2 = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
+						if (c2.getSelectionNoOrdre() < c4.getSelectionNoOrdre())
+							cr2.setSelectionNoOrdre(cr2.getSelectionNoOrdre() + 1);
+
+
+					}
+				}
+			}
+		}
 
 	}
 }
