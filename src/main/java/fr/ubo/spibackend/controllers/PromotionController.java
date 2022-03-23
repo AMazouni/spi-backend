@@ -4,6 +4,7 @@ package fr.ubo.spibackend.controllers;
 import fr.ubo.spibackend.dto.PromotionDTO;
 import fr.ubo.spibackend.dto.converter.PromotionMapper;
 import fr.ubo.spibackend.entities.Promotion;
+import fr.ubo.spibackend.entities.PromotionPK;
 import fr.ubo.spibackend.exception.RestErrorMessage;
 import fr.ubo.spibackend.exception.ServiceException;
 import fr.ubo.spibackend.services.PromotionService;
@@ -11,6 +12,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.mapstruct.factory.Mappers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +29,20 @@ public class PromotionController {
     PromotionService promoServ;
     private PromotionMapper mapper
             = Mappers.getMapper(PromotionMapper.class);
+    @DeleteMapping("/{code}/{annee}")
+    public ResponseEntity deleteById(@PathVariable String code,@PathVariable String annee) {
+        try{PromotionPK promotionPK= new PromotionPK(code,annee);
+        promoServ.deleteById(promotionPK);
+        return new ResponseEntity<>(null,HttpStatus.OK);}
+        catch(DataIntegrityViolationException e){
+            e.printStackTrace();
+            return new ResponseEntity<RestErrorMessage>(new RestErrorMessage("Impossible de supprimer une promotion ayant des étudiants et/ou candidats."),HttpStatus.CONFLICT);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
 
     @GetMapping
     public ResponseEntity findAll(){

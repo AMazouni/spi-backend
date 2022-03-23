@@ -192,5 +192,7 @@ public class PromotionService {
         return promo;
     }
 
-
+    public void deleteById(PromotionPK promotionPK) {
+        promoRepo.deleteById(promotionPK);
+    }
 }
