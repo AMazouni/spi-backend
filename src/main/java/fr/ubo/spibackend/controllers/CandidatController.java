@@ -72,6 +72,18 @@ public class CandidatController {
 
     }
 
+   /* @PutMapping("/updateordreselection")
+    public ResponseEntity updateOrdreSelection(@RequestBody List<Candidat> candidats) {
+        try {
+            candidatServices.updateSelectionOrdre(candidats);
+            return new ResponseEntity("L'ordre de sélection a bien été établi", HttpStatus.OK);
+        }catch(ServiceException e){
+            return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+        }catch (Exception e ){ e.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }*/
 
 
 }

@@ -78,4 +78,10 @@ public class CandidatService {
         else
             throw new ServiceException("Le candidat "+candidat.getNoCandidat()+" n'existe pas", HttpStatus.NOT_FOUND) ;
     }
+
+    public void updateConfirmationCandidat(Candidat candidat) throws ServiceException {
+        //TODO : fonction qui permet de confirmer le choix d'un candidat
+
+
+    }
 }
