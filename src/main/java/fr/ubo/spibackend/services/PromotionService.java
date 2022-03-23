@@ -170,25 +170,26 @@ public class PromotionService {
                         throw new ServiceException("Le nombre maximal d'etudiant pour cette formation est atteint", HttpStatus.NOT_FOUND);
                     for (int i = 0; i < nbEtudiantRestants & i < sortedCandidats.size(); i++)
                         aMigrer.add(sortedCandidats.get(i));
-
+                    System.out.println("-----------------------------"+aMigrer.size());
                     if (aMigrer.size() == 0)
                         throw new ServiceException("Aucun candidats ne peut être accepté", HttpStatus.NOT_FOUND);
                     List<Etudiant> etudiants = etuServ.createEtudiant(aMigrer);
-                    promo.setEtudiants(etudiants);
+                   // promo.setEtudiants(etudiants);
 
                     for (Candidat can : aMigrer) {
                         candServ.deleteCandidatByNocandidat(can.getNoCandidat());
-                         promo.getCandidats().remove(can);
+                        // promo.getCandidats().remove(can);
 
 
                     }
                 }
         }
-        em.detach(promo);
-        Promotion p = promoRepo.findById(new PromotionPK(code,annee)).get();
+        System.out.println(promo);
+//        em.detach(promo);
+//        Promotion p = promoRepo.findById(new PromotionPK(code,annee)).get();
 
 
-        return p;
+        return promo;
     }
 
 
