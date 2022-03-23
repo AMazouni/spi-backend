@@ -89,8 +89,9 @@ public class PromotionService {
             System.out.println(result.get().toString());
             throw new ServiceException("Cette promotion existe déjà",HttpStatus.CONFLICT);
         }
-        if(e.getDateRentree()==null | e.getDateReponseLp()==null | e.getDateReponseLalp()==null)
-            throw new ServiceException("Merci de remplir les champs obligatoires ",HttpStatus.BAD_REQUEST);
+        if(e.getDateRentree()==null | e.getDateReponseLp()==null | e.getDateReponseLalp()==null){
+            System.out.println(e.toString());
+            throw new ServiceException("Merci de remplir les champs obligatoires ",HttpStatus.BAD_REQUEST);}
         if(!(e.getDateReponseLp().before(e.getDateReponseLalp()) & e.getDateReponseLalp().before(e.getDateRentree())))
             throw new ServiceException("Les dates fournies ne sont pas cohérentes.",HttpStatus.PRECONDITION_FAILED);
 
