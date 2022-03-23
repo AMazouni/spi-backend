@@ -32,11 +32,11 @@ public class Formation {
 	private String doubleDiplome;
 	@Basic
 	@Column(name = "DEBUT_ACCREDITATION", nullable = true)
-	@JsonFormat(pattern="dd/MM/YYY")
+	@JsonFormat(pattern="dd/MM/YYYY")
 	private Date debutAccreditation;
 	@Basic
 	@Column(name = "FIN_ACCREDITATION", nullable = true)
-	@JsonFormat(pattern="dd/MM/YYY")
+	@JsonFormat(pattern="dd/MM/YYYY")
 	private Date finAccreditation;
 	@OneToMany(mappedBy = "formationByCodeFormation")
 	@JsonIgnoreProperties(value = {"formationByCodeFormation"})
