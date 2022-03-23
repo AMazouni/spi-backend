@@ -17,8 +17,8 @@ public class SortEntites {
             return sComp;
         }
 
-        BigInteger n1 = a.getSelectionNoOrdre()==null? BigInteger.valueOf(0) :a.getSelectionNoOrdre();
-        BigInteger n2 = b.getSelectionNoOrdre()==null? BigInteger.valueOf(0) :b.getSelectionNoOrdre();
+        Integer n1 = a.getSelectionNoOrdre()==null? Integer.valueOf(0) :a.getSelectionNoOrdre();
+        Integer n2 = b.getSelectionNoOrdre()==null? Integer.valueOf(0) :b.getSelectionNoOrdre();
         sComp = n1.compareTo(n2);
         if (sComp != 0) {
             System.out.println("scomp SelectionOrdre "+n1+n2+"=="+sComp);

@@ -1,5 +1,6 @@
 package fr.ubo.spibackend.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import fr.ubo.spibackend.entities.Candidat;
 import fr.ubo.spibackend.entities.Enseignant;
 import fr.ubo.spibackend.entities.Etudiant;
@@ -16,8 +17,11 @@ public class PromotionDTO {
     private Short noEnseignant;
     private String siglePromotion;
     private int nbMaxEtudiant;
+    @JsonFormat(pattern="dd/MM/YYY")
     private Date dateReponseLp;
+    @JsonFormat(pattern="dd/MM/YYY")
     private Date dateReponseLalp;
+    @JsonFormat(pattern="dd/MM/YYY")
     private Date dateRentree;
     private String lieuRentree;
     private String processusStage;

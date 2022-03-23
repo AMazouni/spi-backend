@@ -25,16 +25,16 @@ public class EtudiantService {
             throw new ServiceException("liste candidats est vide", HttpStatus.NOT_FOUND);
         }
         List<Etudiant> etudiants = new ArrayList<Etudiant>();
-        Promotion promotion;
+//        Promotion promotion;
         Etudiant etudiant;
         for (Candidat candidat : candidats) {
-            promotion = promotionService.findById(candidat.getAnneeUniversitaire(), candidat.getCodeFormation());
+//            promotion = promotionService.findById(candidat.getAnneeUniversitaire(), candidat.getCodeFormation());
             etudiant = etudiantRepository.save(new Etudiant(
                     candidat.getCodeFormation(), candidat.getAnneeUniversitaire(), candidat.getNom(),
                     candidat.getPrenom(), candidat.getSexe(), candidat.getDateNaissance(), candidat.getLieuNaissance(),
                     candidat.getNationalite(), candidat.getTelephone(), candidat.getMobile(), candidat.getEmail(),
                     candidat.getAdresse(), candidat.getCodePostal(), candidat.getVille(), candidat.getPaysOrigine(),
-                    candidat.getUniversiteOrigine(), promotion));
+                    candidat.getUniversiteOrigine(),null));
 
             etudiants.add(etudiant);
         }
@@ -45,7 +45,7 @@ public class EtudiantService {
     public List<Etudiant> getAllEtudiant() throws ServiceException {
         List<Etudiant> etudiants= etudiantRepository.findAll();
         if(etudiants.size()==0)
-            throw new ServiceException("Pas d'etudiants trouvée",HttpStatus.NOT_FOUND);
+            throw new ServiceException("Pas d'etudiants trouvés",HttpStatus.NOT_FOUND);
         return etudiants;
     }
 

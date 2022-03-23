@@ -1,5 +1,6 @@
 package fr.ubo.spibackend.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,7 @@ public class Candidat{
     private String sexe;
     @Basic
     @Column(name = "DATE_NAISSANCE", nullable = false)
+    @JsonFormat(pattern="dd/MM/YYY")
     private LocalDate dateNaissance;
     @Basic
     @Column(name = "LIEU_NAISSANCE", nullable = false, length = 255)
@@ -77,6 +79,7 @@ public class Candidat{
     private String confirmationCandidat;
     @Basic
     @Column(name = "DATE_REPONSE_CANDIDAT", nullable = true)
+    @JsonFormat(pattern="dd/MM/YYY")
     private LocalDate dateReponseCandidat;
 
 

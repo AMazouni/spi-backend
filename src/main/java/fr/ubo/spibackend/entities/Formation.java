@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -31,9 +32,11 @@ public class Formation {
 	private String doubleDiplome;
 	@Basic
 	@Column(name = "DEBUT_ACCREDITATION", nullable = true)
+	@JsonFormat(pattern="dd/MM/YYY")
 	private Date debutAccreditation;
 	@Basic
 	@Column(name = "FIN_ACCREDITATION", nullable = true)
+	@JsonFormat(pattern="dd/MM/YYY")
 	private Date finAccreditation;
 	@OneToMany(mappedBy = "formationByCodeFormation")
 	@JsonIgnoreProperties(value = {"formationByCodeFormation"})
