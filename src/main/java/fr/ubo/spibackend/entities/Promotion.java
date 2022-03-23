@@ -1,6 +1,8 @@
 package fr.ubo.spibackend.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Date;
@@ -28,12 +30,15 @@ public class Promotion implements Serializable {
     private int nbMaxEtudiant;
     @Basic
     @Column(name = "DATE_REPONSE_LP", nullable = true)
+    @JsonFormat(pattern="dd/MM/YYY")
     private Date dateReponseLp;
     @Basic
     @Column(name = "DATE_REPONSE_LALP", nullable = true)
+    @JsonFormat(pattern="dd/MM/YYY")
     private Date dateReponseLalp;
     @Basic
     @Column(name = "DATE_RENTREE", nullable = true)
+    @JsonFormat(pattern="dd/MM/YYY")
     private Date dateRentree;
     @Basic
     @Column(name = "LIEU_RENTREE", nullable = true, length = 12)
