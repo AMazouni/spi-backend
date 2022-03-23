@@ -13,6 +13,7 @@ import fr.ubo.spibackend.entities.Promotion;
 import fr.ubo.spibackend.exception.ServiceException;
 import fr.ubo.spibackend.repositories.CandidatRepository;
 
+
 @Service
 public class CandidatService {
 
@@ -54,26 +55,6 @@ public class CandidatService {
 		return candidats;
 	}
 
-	public void deleteCandidatByNocandidat(String noCandidat) throws ServiceException {
-		Candidat c = candidatRepo.findById(noCandidat).orElse(null);
-		if (c != null)
-			candidatRepo.deleteById(noCandidat);
-		else
-			throw new ServiceException("Le candidat " + noCandidat + " n'existe pas", HttpStatus.NOT_FOUND);
-	}
-
-	public Candidat updateCandidat(Candidat candidat) throws ServiceException {
-		Candidat c = candidatRepo.findById(candidat.getNoCandidat()).orElse(null);
-		if (c != null) {
-			c.setConfirmationCandidat(candidat.getConfirmationCandidat());
-			c.setListeSelection(candidat.getListeSelection());
-			c.setSelectionNoOrdre(candidat.getSelectionNoOrdre());
-			candidatRepo.save(c);
-			return c;
-		} else
-			throw new ServiceException("Le candidat " + candidat.getNoCandidat() + " n'existe pas",
-					HttpStatus.NOT_FOUND);
-	}
 
 	public List<Candidat> updateListeCandidat(List<Candidat> candidats) throws ServiceException {
 
@@ -108,4 +89,40 @@ public class CandidatService {
 		return listCandidats;
 
 	}
+
+    public void deleteCandidatByNocandidat(String noCandidat) throws ServiceException {
+        Candidat c = candidatRepo.findById(noCandidat).orElse(null);
+        if(c!=null)
+            candidatRepo.deleteById(noCandidat);
+        else
+            throw new ServiceException("Le candidat "+noCandidat+" n'existe pas", HttpStatus.NOT_FOUND) ;
+    }
+
+    public Candidat updateCandidat (Candidat candidat)  throws ServiceException {
+    	Optional<Candidat> myCandidat= candidatRepo.findById(candidat.getNoCandidat());
+    	if(myCandidat.isPresent()) {
+    		Candidat candidatResult= myCandidat.get();
+    		candidatResult.setCodeFormation(candidat.getCodeFormation());
+    		candidatResult.setAnneeUniversitaire(candidat.getAnneeUniversitaire());
+    		candidatResult.setNom(candidat.getNom());
+    		candidatResult.setPrenom(candidat.getPrenom());
+    		candidatResult.setSexe(candidat.getSexe());
+    		candidatResult.setDateNaissance(candidat.getDateNaissance());
+    		candidatResult.setLieuNaissance(candidat.getLieuNaissance());
+    		candidatResult.setNationalite(candidat.getNationalite());
+    		candidatResult.setTelephone(candidat.getTelephone());
+    		candidatResult.setMobile(candidat.getMobile());
+    		candidatResult.setEmail(candidat.getEmail());
+    		candidatResult.setAdresse(candidat.getAdresse());
+    		candidatResult.setCodePostal(candidat.getCodePostal());
+    		candidatResult.setVille(candidat.getVille());
+    		candidatResult.setPaysOrigine(candidat.getPaysOrigine());
+    		candidatResult.setUniversiteOrigine(candidat.getUniversiteOrigine());
+    		candidatRepo.save(candidatResult);
+    		
+        	return candidatResult;
+
+    	}
+    	throw new ServiceException("Le candidat "+candidat.getNoCandidat()+" n'existe pas", HttpStatus.NOT_FOUND) ;
+    }
 }

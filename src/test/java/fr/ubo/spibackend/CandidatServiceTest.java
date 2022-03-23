@@ -74,13 +74,22 @@ public class CandidatServiceTest {
 		candidatService.deleteCandidatByNocandidat(candidat.getNoCandidat());
 		Mockito.verify(mockRepository).deleteById(candidat.getNoCandidat());
 	}
-	
+	/*
 	@Test
 	public void updateCandidat() throws ServiceException {
 		Candidat candidat= this.getCandidat();
 		Mockito.when(mockRepository.findById(candidat.getNoCandidat())).thenReturn(Optional.of(candidat));
 		Candidat candidatResult = candidatService.updateCandidat(candidat);
 		assertEquals(candidatResult,candidat);
+
+	}
+	*/
+	@Test
+	public void updateCandidat() throws ServiceException {
+		Candidat candidat= this.getCandidat();
+		Mockito.when(mockRepository.findById(candidat.getNoCandidat())).thenReturn(Optional.of(candidat));
+		Candidat candidatResult = candidatService.updateCandidat(candidat);
+		assertEquals(candidatResult.getPrenom(),candidat.getPrenom());
 
 	}
 }
