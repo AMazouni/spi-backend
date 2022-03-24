@@ -1,5 +1,8 @@
 package fr.ubo.spibackend.services;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -126,19 +129,23 @@ public class CandidatService {
 			}
 
 	public void updateConfirmationCandidat(Candidat candidat) throws ServiceException {
-		List<Candidat> candidats = candidat.getPromotion().getCandidats();
+	//	List<Candidat> candidats = candidat.getPromotion().getCandidats();
+		List<Candidat> candidats = candidatRepo.findAll();
 		Candidat c = candidatRepo.findById(candidat.getNoCandidat()).orElse(null);
 		Candidat cr=null;
 		Candidat cr2=null;
+		DateTimeFormatter formater = DateTimeFormatter.ofPattern("dd/MM/YYY");
 		if(c!=null){
 
 			//Si Confirmation_candidat = oui
 			if(candidat.getConfirmationCandidat().equalsIgnoreCase("O"))
 				c.setConfirmationCandidat("O");
+			    c.setDateReponseCandidat(LocalDate.parse((LocalDate.now().toString()), formater));
 
 			//Si confirmation_candidat = non
 			if(candidat.getConfirmationCandidat().equalsIgnoreCase("N")){
 				c.setConfirmationCandidat("N");
+				c.setDateReponseCandidat(LocalDate.parse((LocalDate.now().toString()), formater));
 
 				//Si confirmation_candidat = non et liste_selection_candidat = LP
 				if(candidat.getListeSelection().equalsIgnoreCase("LP")){
@@ -149,11 +156,14 @@ public class CandidatService {
 						if(c1.getListeSelection().equalsIgnoreCase("LP"))
 							candidatsLp.add(c1);
 
-					//Incrémentation du numéro d'ordre de sélection des candidats qui se trouvent après le candidat
+					//Stockage du dernier numéro de selection avant décrémentation
+					int max = this.LastSelectionOrdreLP(candidatsLp);
+
+					//Dérémentation du numéro d'ordre de sélection des candidats qui se trouvent après le candidat
 					for(Candidat c2 : candidatsLp) {
 						cr = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
 						if (c2.getSelectionNoOrdre()!=null && c2.getSelectionNoOrdre() < candidat.getSelectionNoOrdre())
-							cr.setSelectionNoOrdre(cr.getSelectionNoOrdre() + 1);
+							cr.setSelectionNoOrdre(cr.getSelectionNoOrdre() -1);
 					}
 
 					//recencement des candidats de la liste LA
@@ -167,13 +177,13 @@ public class CandidatService {
 					Candidat cand = candidatRepo.findById(c4.getNoCandidat()).orElse(null);
 					//Modification de sa liste de selection et de son numéro d'ordre
 					cand.setListeSelection("LP");
-					cand.setSelectionNoOrdre(this.LastSelectionOrdreLP(candidatsLp)+1);
+					cand.setSelectionNoOrdre(max);
 
-					//Incrémentation du numéro d'ordre de sélection des candidats de la LA qui se trouvent après le candidat passé en LP
+					//Décrémentation du numéro d'ordre de sélection des candidats de la LA qui se trouvent après le candidat passé en LP
 					for(Candidat c2 : candidatsLA) {
 						cr2 = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
 						if (c2.getSelectionNoOrdre()!=null && c2.getSelectionNoOrdre() < c4.getSelectionNoOrdre())
-							cr2.setSelectionNoOrdre(cr2.getSelectionNoOrdre() + 1);
+							cr2.setSelectionNoOrdre(cr2.getSelectionNoOrdre() -1);
 					}
 				}
 				//Si confirmation_candidat = non et liste_selection_candidat = LA
@@ -187,7 +197,7 @@ public class CandidatService {
 					for(Candidat c2 : candidatsLA) {
 						cr = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
 						if (c2.getSelectionNoOrdre()!=null && c2.getSelectionNoOrdre() < candidat.getSelectionNoOrdre())
-							cr.setSelectionNoOrdre(cr.getSelectionNoOrdre() + 1);
+							cr.setSelectionNoOrdre(cr.getSelectionNoOrdre() -1);
 					}
 					c.setSelectionNoOrdre(null);
 				}

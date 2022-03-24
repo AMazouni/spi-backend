@@ -99,7 +99,7 @@ public class CandidatController {
     
 
 	@PutMapping("/updateConfirmation")
-	public ResponseEntity updateListeCandidat(@RequestBody Candidat candidat) {
+	public ResponseEntity updateConfirmationCandidat(@RequestBody Candidat candidat) {
 		try {
 			candidatServices.updateConfirmationCandidat(candidat);
 			return new ResponseEntity(null, HttpStatus.OK);
@@ -112,7 +112,7 @@ public class CandidatController {
 	}
 
 	@PutMapping("/updateListe")
-	public ResponseEntity updateConfirmationCandidat(@RequestBody List<Candidat> candidats) {
+	public ResponseEntity updateListeCandidat(@RequestBody List<Candidat> candidats) {
 		try {
 			return new ResponseEntity<List<Candidat>>(candidatServices.updateListeCandidat(candidats), HttpStatus.OK);
 		} catch (ServiceException e) {
