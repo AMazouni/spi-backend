@@ -123,4 +123,15 @@ public class CandidatController {
 		}
 	}
 
+	@GetMapping("/{id}")
+	public ResponseEntity findById(@PathVariable String id) {
+		try {
+			return new ResponseEntity<Candidat>(candidatServices.findById(id), HttpStatus.OK);
+		}catch(ServiceException e){
+			return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+		}catch (Exception e ){ e.printStackTrace();
+			return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
 }

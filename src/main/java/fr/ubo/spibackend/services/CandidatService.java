@@ -251,4 +251,10 @@ public class CandidatService {
 		}
 		throw new ServiceException("Le candidat " + candidat.getNoCandidat() + " n'existe pas", HttpStatus.NOT_FOUND);
 	}
+
+	public Candidat findById(String s) throws ServiceException {
+		Candidat c =candidatRepo.findById(s).orElseThrow(()-> new ServiceException("Aucun candidat trouvé.",HttpStatus.NOT_FOUND));
+		return c;
+	}
+
 }
