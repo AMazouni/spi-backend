@@ -103,6 +103,32 @@ public class PromotionService {
         return promoRepo.save(e);
     }
 
+    public Promotion update(Promotion e) throws ServiceException {
+        if(e.getCodeFormation()==null | e.getAnneeUniversitaire()==null)
+            throw new ServiceException("Le code de formation et l'année universitaire sont obligatoires",HttpStatus.BAD_REQUEST);
+        if(e.getNbMaxEtudiant()<0 | e.getNbMaxEtudiant()>999)
+            throw new ServiceException("Le Nombre Max d'étudiants doit être entre 0 et 999.",HttpStatus.PRECONDITION_FAILED);
+        PromotionPK pk = new PromotionPK(e.getCodeFormation(),e.getAnneeUniversitaire());
+        Optional<Promotion> result= promoRepo.findById(pk);
+        if(!(result.isPresent())){
+            System.out.println(result.get().toString());
+            throw new ServiceException("Cette promotion n'existe pas",HttpStatus.CONFLICT);
+        }
+        if(e.getDateRentree()==null | e.getDateReponseLp()==null | e.getDateReponseLalp()==null){
+            System.out.println(e.toString());
+            throw new ServiceException("Merci de remplir les champs obligatoires ",HttpStatus.BAD_REQUEST);}
+        if(!(e.getDateReponseLp().before(e.getDateReponseLalp()) & e.getDateReponseLalp().before(e.getDateRentree())))
+            throw new ServiceException("Les dates fournies ne sont pas cohérentes.",HttpStatus.PRECONDITION_FAILED);
+
+        //TODO : processus stage
+        e.setFormationByCodeFormation(formaServ.getFormationById(e.getCodeFormation()));
+        if(e.getNoEnseignant()!=null)
+            e.setEnseignantByNoEnseignant(enDao.findById(e.getNoEnseignant()).get());
+
+        return promoRepo.save(e);
+    }
+
+
     @Transactional
     public Promotion accepterCandidats(String annee, String code) throws ServiceException {
         Promotion promo = this.findById(annee,code);

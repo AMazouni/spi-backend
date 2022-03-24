@@ -48,6 +48,7 @@ public class PromotionController {
     public ResponseEntity findAll(){
 
         try {
+            System.out.println("test");
             return new ResponseEntity(promoServ.findAll(), HttpStatus.OK);
         } catch (ServiceException e) {
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getMessage()), e.getHttpStatus());
@@ -80,12 +81,25 @@ public class PromotionController {
         }
     }
 
-    @PostMapping("/")
+    @PostMapping("")
 
     public ResponseEntity save(@RequestBody Promotion e) throws ServiceException {
 
         try {
             return new ResponseEntity( promoServ.save(e), HttpStatus.OK);
+        }catch(ServiceException ex){
+            return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(ex.getErrorMeassage()), ex.getHttpStatus());
+        }catch (Exception ex){ ex.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    @PutMapping("")
+    public ResponseEntity update(@RequestBody Promotion e) throws ServiceException {
+
+        try {
+            return new ResponseEntity( promoServ.update(e), HttpStatus.OK);
         }catch(ServiceException ex){
             return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(ex.getErrorMeassage()), ex.getHttpStatus());
         }catch (Exception ex){ ex.printStackTrace();
