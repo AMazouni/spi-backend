@@ -103,15 +103,16 @@ public class CandidatService {
 	public Candidat getFirstCandidatLANNon(List<Candidat> candidats) throws ServiceException {
 		List<Candidat> candidatsLANNon = new ArrayList<>();
 		List<Candidat> sortedCandidats = new ArrayList<>();
+		List<Candidat> candidatsLANNonOrdered = new ArrayList<>();
 		for (Candidat c : candidats)
 			if (!c.getConfirmationCandidat().equalsIgnoreCase("N"))
 				candidatsLANNon.add(c);
 
 		for (Candidat c : candidatsLANNon)
 			if (c.getSelectionNoOrdre() != null)
-
-				try {
-					sortedCandidats = candidatsLANNon.stream()
+				candidatsLANNonOrdered.add(c);
+		try {
+					sortedCandidats = candidatsLANNonOrdered.stream()
 							.sorted(Comparator.comparing(Candidat::getSelectionNoOrdre)).collect(Collectors.toList());
 				} catch (Exception e) {
 
@@ -139,6 +140,7 @@ public class CandidatService {
 			if (candidat.getConfirmationCandidat().equalsIgnoreCase("O"))
 				c.setConfirmationCandidat("O");
 			c.setDateReponseCandidat(LocalDate.now());
+			candidatRepo.save(c);
 
 			// Si confirmation_candidat = non
 			if (candidat.getConfirmationCandidat().equalsIgnoreCase("N")) {
@@ -162,8 +164,9 @@ public class CandidatService {
 					for (Candidat c2 : candidatsLp) {
 						cr = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
 						if (c2.getSelectionNoOrdre() != null && candidat.getSelectionNoOrdre() != null
-								&& c2.getSelectionNoOrdre() < candidat.getSelectionNoOrdre())
+								&& c2.getSelectionNoOrdre() > candidat.getSelectionNoOrdre())
 							cr.setSelectionNoOrdre(cr.getSelectionNoOrdre() - 1);
+						//candidatRepo.save(cr);
 					}
 
 					// recencement des candidats de la liste LA
@@ -174,20 +177,22 @@ public class CandidatService {
 
 					// Premier candidat de la liste d'attente qui n'a pas dit non
 					Candidat c4 = this.getFirstCandidatLANNon(candidatsLA);
+					int order=c4.getSelectionNoOrdre();
+
 					if (c4 != null) {
 						Candidat cand = candidatRepo.findById(c4.getNoCandidat()).orElse(null);
 						// Modification de sa liste de selection et de son numéro d'ordre
 						cand.setListeSelection("LP");
-						cand.setSelectionNoOrdre(max);
+						cand.setSelectionNoOrdre(max+1);
 
 						// Décrémentation du numéro d'ordre de sélection des candidats de la LA qui se
 						// trouvent après le candidat passé en LP
 						for (Candidat c2 : candidatsLA) {
 							cr2 = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
 							if (c2.getSelectionNoOrdre() != null && c4.getSelectionNoOrdre() != null
-									&& c2.getSelectionNoOrdre() < c4.getSelectionNoOrdre())
+									&& c2.getSelectionNoOrdre() > order)
 								cr2.setSelectionNoOrdre(cr2.getSelectionNoOrdre() - 1);
-						}
+											}
 					}
 				}
 				// Si confirmation_candidat = non et liste_selection_candidat = LA
@@ -201,12 +206,12 @@ public class CandidatService {
 					for (Candidat c2 : candidatsLA) {
 						cr = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
 						if (c2.getSelectionNoOrdre() != null
-								&& c2.getSelectionNoOrdre() < candidat.getSelectionNoOrdre())
+								&& c2.getSelectionNoOrdre() > candidat.getSelectionNoOrdre())
 							cr.setSelectionNoOrdre(cr.getSelectionNoOrdre() - 1);
 					}
-					c.setSelectionNoOrdre(null);
 				}
 				c.setSelectionNoOrdre(null);
+				candidatRepo.save(c);
 			}
 
 		} else
