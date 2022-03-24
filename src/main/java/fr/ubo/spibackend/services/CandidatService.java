@@ -78,27 +78,22 @@ public class CandidatService {
 	public List<Candidat> updateListeCandidat(List<Candidat> candidats) throws ServiceException {
 
 		List<Candidat> listCandidats = new ArrayList<Candidat>();
+		String list = candidats.get(0).getListeSelection();
 
 		for (Candidat candidat : candidats) {
 
 			Optional<Candidat> candidatsData = candidatRepo.findById(candidat.getNoCandidat());
 
 			if (candidatsData.isPresent()) {
-//				if (candidatsData.get().getConfirmationCandidat() == "N") {
-//					throw new ServiceException(
-//							"Merci de sélectionner que les candidats qui ont une confirmation positive ou en attente de confirmation.",
-//							HttpStatus.CONFLICT);
-//				}
-				if (candidatsData.get().getListeSelection() != null) {
-					throw new ServiceException(
-							"Merci de sélectionner que les candidats qui n'ont pas de liste de sélection.",
+
+				if (candidat.getListeSelection() != list)
+					throw new ServiceException("Les candidats sélectionné ne sont pas affecté à la même liste.",
 							HttpStatus.CONFLICT);
-				} else {
-					candidatsData.get().setListeSelection(candidat.getListeSelection());
-					candidatsData.get().setSelectionNoOrdre(candidat.getSelectionNoOrdre());
-					listCandidats.add(candidatsData.get());
-					candidatRepo.save(candidatsData.get());
-				}
+
+				candidatsData.get().setListeSelection(candidat.getListeSelection());
+				candidatsData.get().setSelectionNoOrdre(candidat.getSelectionNoOrdre());
+				listCandidats.add(candidatsData.get());
+				candidatRepo.save(candidatsData.get());
 
 			} else {
 				throw new ServiceException("Candidat n'existe pas", HttpStatus.NOT_FOUND);
