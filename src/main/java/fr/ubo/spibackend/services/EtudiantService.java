@@ -29,7 +29,7 @@ public class EtudiantService {
 
 	public List<Etudiant> createEtudiant(List<Candidat> candidats) throws ServiceException {
 		if (candidats.isEmpty()) {
-			throw new ServiceException("liste candidats est vide", HttpStatus.NOT_FOUND);
+			throw new ServiceException("La liste candidats est vide", HttpStatus.NOT_FOUND);
 		}
 		List<Etudiant> etudiants = new ArrayList<Etudiant>();
 //        Promotion promotion;
