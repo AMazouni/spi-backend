@@ -89,8 +89,9 @@ public class PromotionService {
             System.out.println(result.get().toString());
             throw new ServiceException("Cette promotion existe déjà",HttpStatus.CONFLICT);
         }
-        if(e.getDateRentree()==null | e.getDateReponseLp()==null | e.getDateReponseLalp()==null)
-            throw new ServiceException("Merci de remplir les champs obligatoires ",HttpStatus.BAD_REQUEST);
+        if(e.getDateRentree()==null | e.getDateReponseLp()==null | e.getDateReponseLalp()==null){
+            System.out.println(e.toString());
+            throw new ServiceException("Merci de remplir les champs obligatoires ",HttpStatus.BAD_REQUEST);}
         if(!(e.getDateReponseLp().before(e.getDateReponseLalp()) & e.getDateReponseLalp().before(e.getDateRentree())))
             throw new ServiceException("Les dates fournies ne sont pas cohérentes.",HttpStatus.PRECONDITION_FAILED);
 
@@ -170,26 +171,29 @@ public class PromotionService {
                         throw new ServiceException("Le nombre maximal d'etudiant pour cette formation est atteint", HttpStatus.NOT_FOUND);
                     for (int i = 0; i < nbEtudiantRestants & i < sortedCandidats.size(); i++)
                         aMigrer.add(sortedCandidats.get(i));
-
+                    System.out.println("-----------------------------"+aMigrer.size());
                     if (aMigrer.size() == 0)
                         throw new ServiceException("Aucun candidats ne peut être accepté", HttpStatus.NOT_FOUND);
                     List<Etudiant> etudiants = etuServ.createEtudiant(aMigrer);
-                    promo.setEtudiants(etudiants);
+                   // promo.setEtudiants(etudiants);
 
                     for (Candidat can : aMigrer) {
                         candServ.deleteCandidatByNocandidat(can.getNoCandidat());
-                         promo.getCandidats().remove(can);
+                        // promo.getCandidats().remove(can);
 
 
                     }
                 }
         }
-        em.detach(promo);
-        Promotion p = promoRepo.findById(new PromotionPK(code,annee)).get();
+        System.out.println(promo);
+//        em.detach(promo);
+//        Promotion p = promoRepo.findById(new PromotionPK(code,annee)).get();
 
 
-        return p;
+        return promo;
     }
 
-
+    public void deleteById(PromotionPK promotionPK) {
+        promoRepo.deleteById(promotionPK);
+    }
 }

@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -34,6 +35,7 @@ public class Etudiant {
 	private String sexe;
 	@Basic
 	@Column(name = "DATE_NAISSANCE", nullable = false)
+	@JsonFormat(pattern="dd/MM/yyyy")
 	private LocalDate dateNaissance;
 	@Basic
 	@Column(name = "LIEU_NAISSANCE", nullable = false, length = 255)

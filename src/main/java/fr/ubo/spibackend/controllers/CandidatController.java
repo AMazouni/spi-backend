@@ -55,25 +55,53 @@ public class CandidatController {
 			return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
-	}
 
-	@PutMapping("")
-	public ResponseEntity updateCandidat(@RequestBody Candidat candidat) {
+    }
+/*
+    @PutMapping("")
+    public ResponseEntity updateCandidat(@RequestBody Candidat candidat) {
+        try {
+            return new ResponseEntity<Candidat>(candidatServices.updateCandidat(candidat), HttpStatus.OK);
+        }catch(ServiceException e){
+            return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+        }catch (Exception e ){ e.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+    */
+
+    @DeleteMapping("/{noCandidat}")
+    public ResponseEntity deleteCandidat(@PathVariable String noCandidat) {
+        try {
+            candidatServices.deleteCandidatByNocandidat(noCandidat);
+            return new ResponseEntity(null, HttpStatus.OK);
+        }catch(ServiceException e){
+            return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+        }catch (Exception e ){ e.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+    
+    
+    @PutMapping("")
+    public ResponseEntity updateCandidat(@RequestBody Candidat candidat) {
+        try {
+            return new ResponseEntity<Candidat>(candidatServices.updateCandidat(candidat), HttpStatus.OK);
+        }catch(ServiceException e){
+            return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
+        }catch (Exception e ){ e.printStackTrace();
+            return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+    
+
+	@PutMapping("/updateConfirmation")
+	public ResponseEntity updateListeCandidat(@RequestBody Candidat candidat) {
 		try {
-			return new ResponseEntity<Candidat>(candidatServices.updateCandidat(candidat), HttpStatus.OK);
-		} catch (ServiceException e) {
-			return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-	}
-
-	@DeleteMapping("/{noCandidat}")
-	public ResponseEntity deleteCandidat(@PathVariable String noCandidat) {
-		try {
-			candidatServices.deleteCandidatByNocandidat(noCandidat);
+			candidatServices.updateConfirmationCandidat(candidat);
 			return new ResponseEntity(null, HttpStatus.OK);
 		} catch (ServiceException e) {
 			return new ResponseEntity<RestErrorMessage>(new RestErrorMessage(e.getErrorMeassage()), e.getHttpStatus());
@@ -81,11 +109,10 @@ public class CandidatController {
 			e.printStackTrace();
 			return new ResponseEntity(new RestErrorMessage("erreur serveur 500"), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
 	}
 
 	@PutMapping("/updateListe")
-	public ResponseEntity updateListeCandidat(@RequestBody List<Candidat> candidats) {
+	public ResponseEntity updateConfirmationCandidat(@RequestBody List<Candidat> candidats) {
 		try {
 			return new ResponseEntity<List<Candidat>>(candidatServices.updateListeCandidat(candidats), HttpStatus.OK);
 		} catch (ServiceException e) {

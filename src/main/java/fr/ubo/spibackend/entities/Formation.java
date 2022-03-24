@@ -1,15 +1,13 @@
 package fr.ubo.spibackend.entities;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
@@ -34,10 +32,23 @@ public class Formation {
 	private String doubleDiplome;
 	@Basic
 	@Column(name = "DEBUT_ACCREDITATION", nullable = true)
+	@JsonFormat(pattern="dd/MM/yyyy")
 	private Date debutAccreditation;
 	@Basic
 	@Column(name = "FIN_ACCREDITATION", nullable = true)
+	@JsonFormat(pattern="dd/MM/yyyy")
 	private Date finAccreditation;
+	@OneToMany(mappedBy = "formationByCodeFormation")
+	@JsonIgnoreProperties(value = {"formationByCodeFormation"})
+	private List<UniteEnseignement> uniteEnseignements;
+
+	public List<UniteEnseignement> getUniteEnseignements() {
+		return uniteEnseignements;
+	}
+
+	public void setUniteEnseignements(List<UniteEnseignement> uniteEnseignements) {
+		this.uniteEnseignements = uniteEnseignements;
+	}
 
 	public String getCodeFormation() {
 		return codeFormation;
