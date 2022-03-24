@@ -35,7 +35,7 @@ public class Etudiant {
 	private String sexe;
 	@Basic
 	@Column(name = "DATE_NAISSANCE", nullable = false)
-	@JsonFormat(pattern="dd/MM/YYY")
+	@JsonFormat(pattern="dd/MM/yyyy")
 	private LocalDate dateNaissance;
 	@Basic
 	@Column(name = "LIEU_NAISSANCE", nullable = false, length = 255)
