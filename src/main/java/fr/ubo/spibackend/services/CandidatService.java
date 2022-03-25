@@ -68,21 +68,22 @@ public class CandidatService {
 			Optional<Candidat> candidatsData = candidatRepo.findById(candidat.getNoCandidat());
 
 			if (candidatsData.isPresent()) {
-
-				if (candidat.getListeSelection() != list)
-					throw new ServiceException("Les candidats sélectionné ne sont pas affecté à la même liste.",
-							HttpStatus.CONFLICT);
+				System.out.println("list: " + list);
+				System.out.println("candidat.getListeSelection(): " + candidat.getListeSelection());
+//				if (candidat.getListeSelection() != list)
+//					throw new ServiceException("Les candidats sélectionné ne sont pas affecté à la même liste.",
+//							HttpStatus.CONFLICT);
 
 				candidatsData.get().setListeSelection(candidat.getListeSelection());
 				candidatsData.get().setSelectionNoOrdre(candidat.getSelectionNoOrdre());
 				listCandidats.add(candidatsData.get());
-				candidatRepo.save(candidatsData.get());
 
 			} else {
 				throw new ServiceException("Candidat n'existe pas", HttpStatus.NOT_FOUND);
 			}
 
 		}
+		candidatRepo.saveAll(listCandidats);
 		return listCandidats;
 
 	}
