@@ -61,18 +61,17 @@ public class CandidatService {
 	public List<Candidat> updateListeCandidat(List<Candidat> candidats) throws ServiceException {
 
 		List<Candidat> listCandidats = new ArrayList<Candidat>();
-		String list = candidats.get(0).getListeSelection();
+		String list = candidats.get(0).getListeSelection().trim();
 
 		for (Candidat candidat : candidats) {
 
 			Optional<Candidat> candidatsData = candidatRepo.findById(candidat.getNoCandidat());
 
 			if (candidatsData.isPresent()) {
-				System.out.println("list: " + list);
-				System.out.println("candidat.getListeSelection(): " + candidat.getListeSelection());
-//				if (candidat.getListeSelection() != list)
-//					throw new ServiceException("Les candidats sélectionné ne sont pas affecté à la même liste.",
-//							HttpStatus.CONFLICT);
+
+				if (!candidat.getListeSelection().trim().equals(list))
+					throw new ServiceException("Les candidats sélectionné ne sont pas affecté à la même liste.",
+							HttpStatus.CONFLICT);
 
 				candidatsData.get().setListeSelection(candidat.getListeSelection());
 				candidatsData.get().setSelectionNoOrdre(candidat.getSelectionNoOrdre());
@@ -113,15 +112,14 @@ public class CandidatService {
 			if (c.getSelectionNoOrdre() != null)
 				candidatsLANNonOrdered.add(c);
 		try {
-					sortedCandidats = candidatsLANNonOrdered.stream()
-							.sorted(Comparator.comparing(Candidat::getSelectionNoOrdre)).collect(Collectors.toList());
-				} catch (Exception e) {
+			sortedCandidats = candidatsLANNonOrdered.stream()
+					.sorted(Comparator.comparing(Candidat::getSelectionNoOrdre)).collect(Collectors.toList());
+		} catch (Exception e) {
 
-					throw new ServiceException(
-							"Impossible de trier les candidats en liste d'attente par ordre de sélection ",
-							HttpStatus.CONFLICT);
+			throw new ServiceException("Impossible de trier les candidats en liste d'attente par ordre de sélection ",
+					HttpStatus.CONFLICT);
 
-				}
+		}
 		if (!sortedCandidats.isEmpty())
 			return sortedCandidats.get(0);
 		else
@@ -167,7 +165,7 @@ public class CandidatService {
 						if (c2.getSelectionNoOrdre() != null && candidat.getSelectionNoOrdre() != null
 								&& c2.getSelectionNoOrdre() > candidat.getSelectionNoOrdre())
 							cr.setSelectionNoOrdre(cr.getSelectionNoOrdre() - 1);
-						//candidatRepo.save(cr);
+						// candidatRepo.save(cr);
 					}
 
 					// recencement des candidats de la liste LA
@@ -178,13 +176,13 @@ public class CandidatService {
 
 					// Premier candidat de la liste d'attente qui n'a pas dit non
 					Candidat c4 = this.getFirstCandidatLANNon(candidatsLA);
-					int order=c4.getSelectionNoOrdre();
+					int order = c4.getSelectionNoOrdre();
 
 					if (c4 != null) {
 						Candidat cand = candidatRepo.findById(c4.getNoCandidat()).orElse(null);
 						// Modification de sa liste de selection et de son numéro d'ordre
 						cand.setListeSelection("LP");
-						cand.setSelectionNoOrdre(max+1);
+						cand.setSelectionNoOrdre(max + 1);
 
 						// Décrémentation du numéro d'ordre de sélection des candidats de la LA qui se
 						// trouvent après le candidat passé en LP
@@ -193,7 +191,7 @@ public class CandidatService {
 							if (c2.getSelectionNoOrdre() != null && c4.getSelectionNoOrdre() != null
 									&& c2.getSelectionNoOrdre() > order)
 								cr2.setSelectionNoOrdre(cr2.getSelectionNoOrdre() - 1);
-											}
+						}
 					}
 				}
 				// Si confirmation_candidat = non et liste_selection_candidat = LA
@@ -259,7 +257,8 @@ public class CandidatService {
 	}
 
 	public Candidat findById(String s) throws ServiceException {
-		Candidat c =candidatRepo.findById(s).orElseThrow(()-> new ServiceException("Aucun candidat trouvé.",HttpStatus.NOT_FOUND));
+		Candidat c = candidatRepo.findById(s)
+				.orElseThrow(() -> new ServiceException("Aucun candidat trouvé.", HttpStatus.NOT_FOUND));
 		return c;
 	}
 
