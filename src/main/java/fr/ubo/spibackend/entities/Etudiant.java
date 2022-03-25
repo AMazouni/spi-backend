@@ -15,7 +15,8 @@ import org.hibernate.annotations.GenericGenerator;
 public class Etudiant {
 	@Id
 	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	@GenericGenerator(name = "uuid", strategy = "fr.ubo.spibackend.entities.id.CandidatIdGen"
+			,parameters = { @org.hibernate.annotations.Parameter(name = "appendString", value = "E") })
 	@Column(name = "NO_ETUDIANT", nullable = false, length = 50)
 	private String noEtudiant;
 	@Basic

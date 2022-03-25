@@ -14,8 +14,6 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "FORMATION", schema = "DOSI", catalog = "")
 public class Formation {
 	@Id
-	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
 	@Column(name = "CODE_FORMATION", nullable = false, length = 50)
 	private String codeFormation;
 	@Basic

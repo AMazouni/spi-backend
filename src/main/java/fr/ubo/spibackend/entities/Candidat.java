@@ -17,13 +17,15 @@ import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Parameter;
 
 @Entity
 @Table(name = "CANDIDAT", schema = "DOSI", catalog = "")
 public class Candidat {
 	@Id
 	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "uuid2")
+	@GenericGenerator(name = "uuid", strategy = "fr.ubo.spibackend.entities.id.CandidatIdGen"
+			,parameters = { @Parameter(name = "appendString", value = "C") })
 	@Column(name = "NO_CANDIDAT", nullable = false, length = 50)
 	private String noCandidat;
 	@Basic
