@@ -13,4 +13,5 @@ import java.util.ArrayList;
 public interface PromotionRepository extends JpaRepository<Promotion, PromotionPK> {
 
     public ArrayList<Promotion> findByCodeFormationOrderByAnneeUniversitaireDesc(String code);
+
 }
