@@ -61,6 +61,13 @@ public class CandidatService {
 	public List<Candidat> updateListeCandidat(List<Candidat> candidats) throws ServiceException {
 
 		List<Candidat> listCandidats = new ArrayList<Candidat>();
+
+		System.out.println("out of condition");
+		if (candidats.isEmpty()) {
+			System.out.println("in condition");
+			throw new ServiceException("Merci de sélectionner des candidats", HttpStatus.NO_CONTENT);
+		}
+
 		String list = candidats.get(0).getListeSelection().trim();
 
 		for (Candidat candidat : candidats) {
