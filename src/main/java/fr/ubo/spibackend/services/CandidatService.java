@@ -62,9 +62,7 @@ public class CandidatService {
 
 		List<Candidat> listCandidats = new ArrayList<Candidat>();
 
-		System.out.println("out of condition");
 		if (candidats.isEmpty()) {
-			System.out.println("in condition");
 			throw new ServiceException("Merci de sélectionner des candidats", HttpStatus.NO_CONTENT);
 		}
 
