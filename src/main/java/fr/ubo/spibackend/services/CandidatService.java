@@ -70,7 +70,7 @@ public class CandidatService {
 			if (candidatsData.isPresent()) {
 
 				if (!candidat.getListeSelection().trim().equals(list))
-					throw new ServiceException("Les candidats sélectionné ne sont pas affecté à la même liste.",
+					throw new ServiceException("Les candidats sélectionnés ne sont pas affectés à la même liste.",
 							HttpStatus.CONFLICT);
 
 				candidatsData.get().setListeSelection(candidat.getListeSelection());
@@ -155,46 +155,48 @@ public class CandidatService {
 						if (c1.getListeSelection().equalsIgnoreCase("LP"))
 							candidatsLp.add(c1);
 
-					// je vérifie qu'il y ait plus d'un candidat en liste principale avant de décrémenter
-					if(candidatsLp.size()>1){
-					// Stockage du dernier numéro de selection avant décrémentation
-					int max = this.LastSelectionOrdreLP(candidatsLp);
+					// je vérifie qu'il y ait plus d'un candidat en liste principale avant de
+					// décrémenter
+					if (candidatsLp.size() > 1) {
+						// Stockage du dernier numéro de selection avant décrémentation
+						int max = this.LastSelectionOrdreLP(candidatsLp);
 
-					// Dérémentation du numéro d'ordre de sélection des candidats qui se trouvent
-					// après le candidat
-					for (Candidat c2 : candidatsLp) {
-						cr = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
-						if (c2.getSelectionNoOrdre() != null && candidat.getSelectionNoOrdre() != null
-								&& c2.getSelectionNoOrdre() > candidat.getSelectionNoOrdre())
-							cr.setSelectionNoOrdre(cr.getSelectionNoOrdre() - 1);
-						// candidatRepo.save(cr);
-					}
-
-					// recencement des candidats de la liste LA
-					List<Candidat> candidatsLA = new ArrayList<>();
-					for (Candidat c3 : candidats)
-						if (c3.getListeSelection().equalsIgnoreCase("LA"))
-							candidatsLA.add(c3);
-
-					// Premier candidat de la liste d'attente qui n'a pas dit non
-					Candidat c4 = this.getFirstCandidatLANNon(candidatsLA);
-					int order = c4.getSelectionNoOrdre();
-
-					if (c4 != null) {
-						Candidat cand = candidatRepo.findById(c4.getNoCandidat()).orElse(null);
-						// Modification de sa liste de selection et de son numéro d'ordre
-						cand.setListeSelection("LP");
-						cand.setSelectionNoOrdre(max + 1);
-
-						// Décrémentation du numéro d'ordre de sélection des candidats de la LA qui se trouvent après le candidat passé en LP
-						if(candidatsLA.size()>1){
-						for (Candidat c2 : candidatsLA) {
-							cr2 = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
-							if (c2.getSelectionNoOrdre() != null && c4.getSelectionNoOrdre() != null
-									&& c2.getSelectionNoOrdre() > order)
-								cr2.setSelectionNoOrdre(cr2.getSelectionNoOrdre() - 1);
+						// Dérémentation du numéro d'ordre de sélection des candidats qui se trouvent
+						// après le candidat
+						for (Candidat c2 : candidatsLp) {
+							cr = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
+							if (c2.getSelectionNoOrdre() != null && candidat.getSelectionNoOrdre() != null
+									&& c2.getSelectionNoOrdre() > candidat.getSelectionNoOrdre())
+								cr.setSelectionNoOrdre(cr.getSelectionNoOrdre() - 1);
+							// candidatRepo.save(cr);
 						}
-						}
+
+						// recencement des candidats de la liste LA
+						List<Candidat> candidatsLA = new ArrayList<>();
+						for (Candidat c3 : candidats)
+							if (c3.getListeSelection().equalsIgnoreCase("LA"))
+								candidatsLA.add(c3);
+
+						// Premier candidat de la liste d'attente qui n'a pas dit non
+						Candidat c4 = this.getFirstCandidatLANNon(candidatsLA);
+						int order = c4.getSelectionNoOrdre();
+
+						if (c4 != null) {
+							Candidat cand = candidatRepo.findById(c4.getNoCandidat()).orElse(null);
+							// Modification de sa liste de selection et de son numéro d'ordre
+							cand.setListeSelection("LP");
+							cand.setSelectionNoOrdre(max + 1);
+
+							// Décrémentation du numéro d'ordre de sélection des candidats de la LA qui se
+							// trouvent après le candidat passé en LP
+							if (candidatsLA.size() > 1) {
+								for (Candidat c2 : candidatsLA) {
+									cr2 = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
+									if (c2.getSelectionNoOrdre() != null && c4.getSelectionNoOrdre() != null
+											&& c2.getSelectionNoOrdre() > order)
+										cr2.setSelectionNoOrdre(cr2.getSelectionNoOrdre() - 1);
+								}
+							}
 						}
 					}
 				}
@@ -206,7 +208,7 @@ public class CandidatService {
 						if (c3.getListeSelection().equalsIgnoreCase("LA"))
 							candidatsLA.add(c3);
 
-					if(candidatsLA.size()>1) {
+					if (candidatsLA.size() > 1) {
 						for (Candidat c2 : candidatsLA) {
 							cr = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
 							if (c2.getSelectionNoOrdre() != null
