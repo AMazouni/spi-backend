@@ -155,6 +155,8 @@ public class CandidatService {
 						if (c1.getListeSelection().equalsIgnoreCase("LP"))
 							candidatsLp.add(c1);
 
+					// je vérifie qu'il y ait plus d'un candidat en liste principale avant de décrémenter
+					if(candidatsLp.size()>1){
 					// Stockage du dernier numéro de selection avant décrémentation
 					int max = this.LastSelectionOrdreLP(candidatsLp);
 
@@ -184,13 +186,15 @@ public class CandidatService {
 						cand.setListeSelection("LP");
 						cand.setSelectionNoOrdre(max + 1);
 
-						// Décrémentation du numéro d'ordre de sélection des candidats de la LA qui se
-						// trouvent après le candidat passé en LP
+						// Décrémentation du numéro d'ordre de sélection des candidats de la LA qui se trouvent après le candidat passé en LP
+						if(candidatsLA.size()>1){
 						for (Candidat c2 : candidatsLA) {
 							cr2 = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
 							if (c2.getSelectionNoOrdre() != null && c4.getSelectionNoOrdre() != null
 									&& c2.getSelectionNoOrdre() > order)
 								cr2.setSelectionNoOrdre(cr2.getSelectionNoOrdre() - 1);
+						}
+						}
 						}
 					}
 				}
@@ -202,11 +206,13 @@ public class CandidatService {
 						if (c3.getListeSelection().equalsIgnoreCase("LA"))
 							candidatsLA.add(c3);
 
-					for (Candidat c2 : candidatsLA) {
-						cr = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
-						if (c2.getSelectionNoOrdre() != null
-								&& c2.getSelectionNoOrdre() > candidat.getSelectionNoOrdre())
-							cr.setSelectionNoOrdre(cr.getSelectionNoOrdre() - 1);
+					if(candidatsLA.size()>1) {
+						for (Candidat c2 : candidatsLA) {
+							cr = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
+							if (c2.getSelectionNoOrdre() != null
+									&& c2.getSelectionNoOrdre() > candidat.getSelectionNoOrdre())
+								cr.setSelectionNoOrdre(cr.getSelectionNoOrdre() - 1);
+						}
 					}
 				}
 				c.setSelectionNoOrdre(null);
