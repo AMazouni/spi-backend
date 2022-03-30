@@ -134,7 +134,12 @@ public class CandidatService {
 
 	public void updateConfirmationCandidat(Candidat candidat) throws ServiceException {
 		// List<Candidat> candidats = candidat.getPromotion().getCandidats();
-		List<Candidat> candidats = candidatRepo.findAll();
+		List<Candidat> candidats1 = candidatRepo.findAll();
+		List<Candidat> candidats = new ArrayList<>();
+		for(Candidat c : candidats1)
+			if(c.getListeSelection()!=null)
+				candidats.add(c);
+
 		Candidat c = candidatRepo.findById(candidat.getNoCandidat()).orElse(null);
 		Candidat cr = null;
 		Candidat cr2 = null;
