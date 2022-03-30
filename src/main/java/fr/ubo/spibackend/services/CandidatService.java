@@ -110,6 +110,7 @@ public class CandidatService {
 		List<Candidat> candidatsLANNon = new ArrayList<>();
 		List<Candidat> sortedCandidats = new ArrayList<>();
 		List<Candidat> candidatsLANNonOrdered = new ArrayList<>();
+
 		if (!candidats.isEmpty()) {
 			for (Candidat c : candidats)
 				if (!c.getConfirmationCandidat().equalsIgnoreCase("N"))
@@ -191,24 +192,26 @@ public class CandidatService {
 							if (c3.getListeSelection().equalsIgnoreCase("LA"))
 								candidatsLA.add(c3);
 
-						// Premier candidat de la liste d'attente qui n'a pas dit non
-						Candidat c4 = this.getFirstCandidatLANNon(candidatsLA);
-						int order = c4.getSelectionNoOrdre();
+						if (candidatsLA.size() > 0) {
+							// Premier candidat de la liste d'attente qui n'a pas dit non
+							Candidat c4 = this.getFirstCandidatLANNon(candidatsLA);
+							int order = c4.getSelectionNoOrdre();
 
-						if (c4 != null) {
-							Candidat cand = candidatRepo.findById(c4.getNoCandidat()).orElse(null);
-							// Modification de sa liste de selection et de son numéro d'ordre
-							cand.setListeSelection("LP");
-							cand.setSelectionNoOrdre(max + 1);
+							if (c4 != null) {
+								Candidat cand = candidatRepo.findById(c4.getNoCandidat()).orElse(null);
+								// Modification de sa liste de selection et de son numéro d'ordre
+								cand.setListeSelection("LP");
+								cand.setSelectionNoOrdre(max + 1);
 
-							// Décrémentation du numéro d'ordre de sélection des candidats de la LA qui se
-							// trouvent après le candidat passé en LP
-							if (candidatsLA.size() > 1) {
-								for (Candidat c2 : candidatsLA) {
-									cr2 = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
-									if (c2.getSelectionNoOrdre() != null && c4.getSelectionNoOrdre() != null
-											&& c2.getSelectionNoOrdre() > order)
-										cr2.setSelectionNoOrdre(cr2.getSelectionNoOrdre() - 1);
+								// Décrémentation du numéro d'ordre de sélection des candidats de la LA qui se
+								// trouvent après le candidat passé en LP
+								if (candidatsLA.size() > 1) {
+									for (Candidat c2 : candidatsLA) {
+										cr2 = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
+										if (c2.getSelectionNoOrdre() != null && c4.getSelectionNoOrdre() != null
+												&& c2.getSelectionNoOrdre() > order)
+											cr2.setSelectionNoOrdre(cr2.getSelectionNoOrdre() - 1);
+									}
 								}
 							}
 						}
