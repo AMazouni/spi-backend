@@ -14,18 +14,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.annotations.Parameter;
 
 @Entity
 @Table(name = "CANDIDAT", schema = "DOSI", catalog = "")
 public class Candidat {
 	@Id
 	@GeneratedValue(generator = "uuid")
-	@GenericGenerator(name = "uuid", strategy = "fr.ubo.spibackend.entities.id.CandidatIdGen"
-			,parameters = { @Parameter(name = "appendString", value = "C") })
+	@GenericGenerator(name = "uuid", strategy = "fr.ubo.spibackend.entities.id.CandidatIdGen", parameters = {
+			@Parameter(name = "appendString", value = "C") })
 	@Column(name = "NO_CANDIDAT", nullable = false, length = 50)
 	private String noCandidat;
 	@Basic
@@ -232,19 +232,6 @@ public class Candidat {
 
 	public void setNationalite(String nationalite) {
 		this.nationalite = nationalite;
-	}
-
-	@Override
-	public String toString() {
-		return "Candidat{" + "noCandidat='" + noCandidat + '\'' + ", codeFormation='" + codeFormation + '\''
-				+ ", anneeUniversitaire='" + anneeUniversitaire + '\'' + ", nom='" + nom + '\'' + ", prenom='" + prenom
-				+ '\'' + ", sexe='" + sexe + '\'' + ", dateNaissance=" + dateNaissance + ", lieuNaissance='"
-				+ lieuNaissance + '\'' + ", nationalite='" + nationalite + '\'' + ", telephone='" + telephone + '\''
-				+ ", mobile='" + mobile + '\'' + ", email='" + email + '\'' + ", adresse='" + adresse + '\''
-				+ ", codePostal='" + codePostal + '\'' + ", ville='" + ville + '\'' + ", paysOrigine='" + paysOrigine
-				+ '\'' + ", universiteOrigine='" + universiteOrigine + '\'' + ", listeSelection='" + listeSelection
-				+ '\'' + ", selectionNoOrdre=" + selectionNoOrdre + ", confirmationCandidat='" + confirmationCandidat
-				+ '\'' + ", dateReponseCandidat=" + dateReponseCandidat + ", promotion=" + promotion + '}';
 	}
 
 	public String getTelephone() {

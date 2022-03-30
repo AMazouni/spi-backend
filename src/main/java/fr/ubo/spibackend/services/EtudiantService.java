@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import fr.ubo.spibackend.entities.Candidat;
 import fr.ubo.spibackend.entities.Etudiant;
+import fr.ubo.spibackend.entities.Promotion;
 import fr.ubo.spibackend.exception.ServiceException;
 import fr.ubo.spibackend.repositories.EtudiantRepository;
 
@@ -34,11 +35,11 @@ public class EtudiantService {
 			throw new ServiceException("La liste des candidats est vide", HttpStatus.NOT_FOUND);
 		}
 		List<Etudiant> etudiants = new ArrayList<Etudiant>();
-//        Promotion promotion;
+		Promotion promotion;
 		Etudiant etudiant;
 
 		for (Candidat candidat : candidats) {
-//            promotion = promotionService.findById(candidat.getAnneeUniversitaire(), candidat.getCodeFormation());
+			promotion = promotionService.findById(candidat.getAnneeUniversitaire(), candidat.getCodeFormation());
 			List<Etudiant> etudiantsWithEmail = etudiantRepository.findAll().stream()
 					.filter(etd -> candidat.getEmail().equals(etd.getEmail())).collect(Collectors.toList());
 
