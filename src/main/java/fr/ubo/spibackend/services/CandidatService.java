@@ -63,32 +63,33 @@ public class CandidatService {
 		List<Candidat> listCandidats = new ArrayList<Candidat>();
 
 		if (candidats.isEmpty()) {
-			throw new ServiceException("Merci de sélectionner des candidats", HttpStatus.NO_CONTENT);
-		}
+			throw new ServiceException("Merci de sélectionner des candidats", HttpStatus.CONFLICT);
+		} else {
 
-		String list = candidats.get(0).getListeSelection().trim();
+			String list = candidats.get(0).getListeSelection().trim();
 
-		for (Candidat candidat : candidats) {
+			for (Candidat candidat : candidats) {
 
-			Optional<Candidat> candidatsData = candidatRepo.findById(candidat.getNoCandidat());
+				Optional<Candidat> candidatsData = candidatRepo.findById(candidat.getNoCandidat());
 
-			if (candidatsData.isPresent()) {
+				if (candidatsData.isPresent()) {
 
-				if (!candidat.getListeSelection().trim().equals(list))
-					throw new ServiceException("Les candidats sélectionnés ne sont pas affectés à la même liste.",
-							HttpStatus.CONFLICT);
+					if (!candidat.getListeSelection().trim().equals(list))
+						throw new ServiceException("Les candidats sélectionnés ne sont pas affectés à la même liste.",
+								HttpStatus.CONFLICT);
 
-				candidatsData.get().setListeSelection(candidat.getListeSelection());
-				candidatsData.get().setSelectionNoOrdre(candidat.getSelectionNoOrdre());
-				listCandidats.add(candidatsData.get());
+					candidatsData.get().setListeSelection(candidat.getListeSelection());
+					candidatsData.get().setSelectionNoOrdre(candidat.getSelectionNoOrdre());
+					listCandidats.add(candidatsData.get());
 
-			} else {
-				throw new ServiceException("Candidat n'existe pas", HttpStatus.NOT_FOUND);
+				} else {
+					throw new ServiceException("Candidat n'existe pas", HttpStatus.NOT_FOUND);
+				}
+
 			}
-
+			candidatRepo.saveAll(listCandidats);
+			return listCandidats;
 		}
-		candidatRepo.saveAll(listCandidats);
-		return listCandidats;
 
 	}
 
