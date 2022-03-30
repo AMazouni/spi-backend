@@ -110,26 +110,29 @@ public class CandidatService {
 		List<Candidat> candidatsLANNon = new ArrayList<>();
 		List<Candidat> sortedCandidats = new ArrayList<>();
 		List<Candidat> candidatsLANNonOrdered = new ArrayList<>();
-		for (Candidat c : candidats)
-			if (!c.getConfirmationCandidat().equalsIgnoreCase("N"))
-				candidatsLANNon.add(c);
+		if (!candidats.isEmpty()) {
+			for (Candidat c : candidats)
+				if (!c.getConfirmationCandidat().equalsIgnoreCase("N"))
+					candidatsLANNon.add(c);
 
-		for (Candidat c : candidatsLANNon)
-			if (c.getSelectionNoOrdre() != null)
-				candidatsLANNonOrdered.add(c);
-		try {
-			sortedCandidats = candidatsLANNonOrdered.stream()
-					.sorted(Comparator.comparing(Candidat::getSelectionNoOrdre)).collect(Collectors.toList());
-		} catch (Exception e) {
+			for (Candidat c : candidatsLANNon)
+				if (c.getSelectionNoOrdre() != null)
+					candidatsLANNonOrdered.add(c);
+			try {
+				sortedCandidats = candidatsLANNonOrdered.stream()
+						.sorted(Comparator.comparing(Candidat::getSelectionNoOrdre)).collect(Collectors.toList());
+			} catch (Exception e) {
 
-			throw new ServiceException("Impossible de trier les candidats en liste d'attente par ordre de sélection ",
-					HttpStatus.CONFLICT);
+				throw new ServiceException("Impossible de trier les candidats en liste d'attente par ordre de sélection ",
+						HttpStatus.CONFLICT);
 
+			}
+			if (!sortedCandidats.isEmpty())
+				return sortedCandidats.get(0);
+			else
+				return null;
 		}
-		if (!sortedCandidats.isEmpty())
-			return sortedCandidats.get(0);
-		else
-			return null;
+		return null;
 	}
 
 	public void updateConfirmationCandidat(Candidat candidat) throws ServiceException {
