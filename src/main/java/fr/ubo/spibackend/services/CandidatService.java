@@ -2,10 +2,7 @@ package fr.ubo.spibackend.services;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -110,31 +107,43 @@ public class CandidatService {
 		List<Candidat> candidatsLANNon = new ArrayList<>();
 		List<Candidat> sortedCandidats = new ArrayList<>();
 		List<Candidat> candidatsLANNonOrdered = new ArrayList<>();
-		for (Candidat c : candidats)
-			if (!c.getConfirmationCandidat().equalsIgnoreCase("N"))
-				candidatsLANNon.add(c);
 
-		for (Candidat c : candidatsLANNon)
-			if (c.getSelectionNoOrdre() != null)
-				candidatsLANNonOrdered.add(c);
-		try {
-			sortedCandidats = candidatsLANNonOrdered.stream()
-					.sorted(Comparator.comparing(Candidat::getSelectionNoOrdre)).collect(Collectors.toList());
-		} catch (Exception e) {
+		if (!candidats.isEmpty()) {
+			for (Candidat c : candidats)
+				if (Objects.isNull(c.getConfirmationCandidat()) || c.getConfirmationCandidat().equalsIgnoreCase("O"))
+					candidatsLANNon.add(c);
 
-			throw new ServiceException("Impossible de trier les candidats en liste d'attente par ordre de sélection ",
-					HttpStatus.CONFLICT);
+			for (Candidat c : candidatsLANNon)
+				if (c.getSelectionNoOrdre() != null)
+					candidatsLANNonOrdered.add(c);
+			try {
+				sortedCandidats = candidatsLANNonOrdered.stream()
+						.sorted(Comparator.comparing(Candidat::getSelectionNoOrdre)).collect(Collectors.toList());
+			} catch (Exception e) {
 
+				throw new ServiceException("Impossible de trier les candidats en liste d'attente par ordre de sélection ",
+						HttpStatus.CONFLICT);
+
+			}
+			if (!sortedCandidats.isEmpty())
+				return sortedCandidats.get(0);
+			else
+				return null;
 		}
-		if (!sortedCandidats.isEmpty())
-			return sortedCandidats.get(0);
-		else
-			return null;
+		return null;
 	}
 
 	public void updateConfirmationCandidat(Candidat candidat) throws ServiceException {
-		// List<Candidat> candidats = candidat.getPromotion().getCandidats();
-		List<Candidat> candidats = candidatRepo.findAll();
+		System.out.println(candidat.getPromotion()==null);
+		Candidat cUpdated=candidatRepo.getById(candidat.getNoCandidat());
+
+		 List<Candidat> candidats1 = cUpdated.getPromotion().getCandidats();
+		//List<Candidat> candidats1 = candidatRepo.findAll();
+		List<Candidat> candidats = new ArrayList<>();
+		for(Candidat c : candidats1)
+			if(c.getListeSelection()!=null)
+				candidats.add(c);
+
 		Candidat c = candidatRepo.findById(candidat.getNoCandidat()).orElse(null);
 		Candidat cr = null;
 		Candidat cr2 = null;
@@ -182,25 +191,33 @@ public class CandidatService {
 						for (Candidat c3 : candidats)
 							if (c3.getListeSelection().equalsIgnoreCase("LA"))
 								candidatsLA.add(c3);
+						List<Candidat> cdsLANNon = new ArrayList<>();
+						if (!candidatsLA.isEmpty()) {
+							for (Candidat cd : candidatsLA)
+								if (Objects.isNull(cd.getConfirmationCandidat()) || cd.getConfirmationCandidat().equalsIgnoreCase("O"))
+									cdsLANNon.add(cd);
+						}
 
-						// Premier candidat de la liste d'attente qui n'a pas dit non
-						Candidat c4 = this.getFirstCandidatLANNon(candidatsLA);
-						int order = c4.getSelectionNoOrdre();
+						if (/*candidatsLA.size() > 0*/ cdsLANNon.size()>0) {
+							// Premier candidat de la liste d'attente qui n'a pas dit non
+							Candidat c4 = this.getFirstCandidatLANNon(candidatsLA);
+							int order = c4.getSelectionNoOrdre();
 
-						if (c4 != null) {
-							Candidat cand = candidatRepo.findById(c4.getNoCandidat()).orElse(null);
-							// Modification de sa liste de selection et de son numéro d'ordre
-							cand.setListeSelection("LP");
-							cand.setSelectionNoOrdre(max + 1);
+							if (c4 != null) {
+								Candidat cand = candidatRepo.findById(c4.getNoCandidat()).orElse(null);
+								// Modification de sa liste de selection et de son numéro d'ordre
+								cand.setListeSelection("LP");
+								cand.setSelectionNoOrdre(max + 1);
 
-							// Décrémentation du numéro d'ordre de sélection des candidats de la LA qui se
-							// trouvent après le candidat passé en LP
-							if (candidatsLA.size() > 1) {
-								for (Candidat c2 : candidatsLA) {
-									cr2 = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
-									if (c2.getSelectionNoOrdre() != null && c4.getSelectionNoOrdre() != null
-											&& c2.getSelectionNoOrdre() > order)
-										cr2.setSelectionNoOrdre(cr2.getSelectionNoOrdre() - 1);
+								// Décrémentation du numéro d'ordre de sélection des candidats de la LA qui se
+								// trouvent après le candidat passé en LP
+								if (candidatsLA.size() > 1) {
+									for (Candidat c2 : candidatsLA) {
+										cr2 = candidatRepo.findById(c2.getNoCandidat()).orElse(null);
+										if (c2.getSelectionNoOrdre() != null && c4.getSelectionNoOrdre() != null
+												&& c2.getSelectionNoOrdre() > order)
+											cr2.setSelectionNoOrdre(cr2.getSelectionNoOrdre() - 1);
+									}
 								}
 							}
 						}
