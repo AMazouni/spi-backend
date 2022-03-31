@@ -191,8 +191,14 @@ public class CandidatService {
 						for (Candidat c3 : candidats)
 							if (c3.getListeSelection().equalsIgnoreCase("LA"))
 								candidatsLA.add(c3);
+						List<Candidat> cdsLANNon = new ArrayList<>();
+						if (!candidatsLA.isEmpty()) {
+							for (Candidat cd : candidatsLA)
+								if (Objects.isNull(cd.getConfirmationCandidat()) || cd.getConfirmationCandidat().equalsIgnoreCase("O"))
+									cdsLANNon.add(cd);
+						}
 
-						if (candidatsLA.size() > 0) {
+						if (/*candidatsLA.size() > 0*/ cdsLANNon.size()>0) {
 							// Premier candidat de la liste d'attente qui n'a pas dit non
 							Candidat c4 = this.getFirstCandidatLANNon(candidatsLA);
 							int order = c4.getSelectionNoOrdre();
