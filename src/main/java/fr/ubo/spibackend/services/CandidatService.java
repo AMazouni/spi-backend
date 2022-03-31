@@ -2,10 +2,7 @@ package fr.ubo.spibackend.services;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,7 +110,7 @@ public class CandidatService {
 
 		if (!candidats.isEmpty()) {
 			for (Candidat c : candidats)
-				if (!c.getConfirmationCandidat().equalsIgnoreCase("N"))
+				if (Objects.isNull(c.getConfirmationCandidat()) || c.getConfirmationCandidat().equalsIgnoreCase("O"))
 					candidatsLANNon.add(c);
 
 			for (Candidat c : candidatsLANNon)
@@ -137,8 +134,11 @@ public class CandidatService {
 	}
 
 	public void updateConfirmationCandidat(Candidat candidat) throws ServiceException {
-		// List<Candidat> candidats = candidat.getPromotion().getCandidats();
-		List<Candidat> candidats1 = candidatRepo.findAll();
+		System.out.println(candidat.getPromotion()==null);
+		Candidat cUpdated=candidatRepo.getById(candidat.getNoCandidat());
+
+		 List<Candidat> candidats1 = cUpdated.getPromotion().getCandidats();
+		//List<Candidat> candidats1 = candidatRepo.findAll();
 		List<Candidat> candidats = new ArrayList<>();
 		for(Candidat c : candidats1)
 			if(c.getListeSelection()!=null)
