@@ -44,8 +44,7 @@ public class EtudiantService {
 					.filter(etd -> candidat.getEmail().equals(etd.getEmail())).collect(Collectors.toList());
 
 			if (!etudiantsWithEmail.isEmpty()) {
-				throw new ServiceException("Candidat " + etudiantsWithEmail.get(0).getNom() + " "
-						+ etudiantsWithEmail.get(0).getPrenom() + " est déjà accepté(e) comme étudiant(e)",
+				throw new ServiceException("Un(e) candidat(e) ayant l'email " + etudiantsWithEmail.get(0).getEmail() + " a déjà été accepté(e) comme étudiant(e)",
 						HttpStatus.CONFLICT);
 
 			} else {
